@@ -1,0 +1,25 @@
+<html>
+<head>
+	<title>Star Chart Generator</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css"/>
+	<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+
+	<script src="timepicker.js"></script>
+	<script src="jstz.js"></script>
+	<script src="StarChart.js"></script>
+</head>
+
+<body>
+	<h1>Star Chart Generator</h1>
+	<img src="" height="600" width="600"/>
+	<form>
+		<p>Latitude: <input type="text" name="Lat"/></p>
+		<p>Longitude: <input type="text" name="Lng"/></p>
+		<p>Date: <input type="text" name="Date" id="datepicker"/></p>
+		<p>Time: <input type="text" name="Time" id="timepicker"/></p>
+		<input type="hidden" name="TZ" id="tzField" value=""/>
+		<input type="submit" value="Update Chart"/>
+	</form>
+</body>
