@@ -42,14 +42,27 @@ namespace tsc
 {
 namespace Time
 {
+	typedef struct ChristianDate
+	{
+		integer year;
+		integer month;
+		integer day;
+		integer hour;
+		integer minute;
+		integer second;
+
+		ChristianDate(integer _year, integer _month, integer _day, integer _hour, integer _minute, integer _second) : year(_year), month(_month), day(_day), hour(_hour), minute(_minute), second(_second) { };
+		ChristianDate(integer _year, integer _month, integer _day) : year(_year), month(_month), day(_day), hour(0), minute(0), second(0) { };
+	} ChristianDate;
+
 	class Stardate
 	{
 		public:
 			Stardate(real JD);
 			~Stardate();
-			static Stardate fromDate(integer year, integer month, integer day, integer hour, integer minute, integer second);
-			static Stardate fromJulianDate(integer year, integer month, integer day, integer hour, integer minute, integer second);
-			static Stardate fromGregorianDate(integer year, integer month, integer day, integer hour, integer minute, integer second);
+			static Stardate fromDate(ChristianDate date);
+			static Stardate fromJulianDate(ChristianDate date);
+			static Stardate fromGregorianDate(ChristianDate date);
 			void addDays(integer days);
 			real toJD();
 			real J2000();
@@ -58,13 +71,12 @@ namespace Time
 			bool isJulian();
 			bool isGregorian();
 			Degree meanSidereal();
-			void nutation(real& dPsi, real& dE);
-			real meanObliquity();
-			real apparentSidereal();
+			void nutation(Degree& Psi, Degree& dE);
+			void nutation(Degree& Psi, Degree& dE, bool trueObliq);
+			Degree meanObliquity();
+			Degree apparentSidereal();
 
-			void toGregorianDate(integer& year, integer& month, real& day);
-			void toGregorianDate(integer& year, integer& month, integer& day,
-				integer& hour, integer& minute, integer& second);
+			ChristianDate toGregorianDate();
 			std::string toGregorianDateStr();
 
 			bool operator==(Stardate& param);
@@ -84,6 +96,7 @@ namespace Time
 	};
 
 	const Stardate GREGORIAN_START(2298883.5);
+	extern real nutationTerms[63][9];
 }
 }
 

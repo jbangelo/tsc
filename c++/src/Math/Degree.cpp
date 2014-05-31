@@ -41,6 +41,13 @@ Degree::Degree(real value) :
 	this->updateHMS();
 }
 
+Degree::Degree() :
+	_value(0.0)
+{
+	this->updateHMS();
+	this->updateDMS();
+}
+
 Degree::~Degree()
 {
 
@@ -49,6 +56,16 @@ Degree::~Degree()
 Degree Degree::fromRad(real value)
 {
 	return Degree(value*(180.0/AstroMath::pi));
+}
+
+Degree Degree::fromDMS(real deg, real arcminute, real arcsecond)
+{
+	return Degree(deg+(AstroMath::sign(deg)*arcminute/60.0)+(AstroMath::sign(deg)*arcsecond/3600.0));
+}
+
+Degree Degree::fromHMS(real hour, real minute, real second)
+{
+	return Degree((hour+(AstroMath::sign(hour)*minute/60.0)+(AstroMath::sign(hour)*second/3600.0))*15.0);
 }
 
 real Degree::deg()
@@ -197,6 +214,26 @@ Degree Degree::operator*(const Degree& param)
 }
 
 Degree Degree::operator/(const Degree& param)
+{
+	return Degree(this->_value / param._value);
+}
+
+Degree Degree::operator+=(const Degree& param)
+{
+	return Degree(this->_value + param._value);
+}
+
+Degree Degree::operator-=(const Degree& param)
+{
+	return Degree(this->_value - param._value);
+}
+
+Degree Degree::operator*=(const Degree& param)
+{
+	return Degree(this->_value * param._value);
+}
+
+Degree Degree::operator/=(const Degree& param)
 {
 	return Degree(this->_value / param._value);
 }

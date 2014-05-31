@@ -34,6 +34,7 @@
 
 using tsc::Math::Degree;
 using tsc::Time::Stardate;
+using tsc::Time::ChristianDate;
 using namespace std;
 
 int main(int argc, char** argv)
@@ -49,22 +50,22 @@ int main(int argc, char** argv)
 	cout << "d1 * d2 = " << (d1*d2).degStr() << endl;
 	cout << "d1 / d2 = " << (d1/d2).degStr() << endl;
 
-	Stardate sd1 = Stardate::fromDate(2000, 1, 1, 12, 0, 0);
+	Stardate sd1 = Stardate::fromDate(ChristianDate(2000, 1, 1, 12, 0, 0));
 	Stardate sd2(2451179.5);
-	Stardate sd3 = Stardate::fromDate(1987, 1, 27, 0, 0, 0);
+	Stardate sd3 = Stardate::fromDate(ChristianDate(1987, 1, 27));
 	Stardate sd4(2446966.0);
-	Stardate sd5 = Stardate::fromDate(1988, 1, 27, 0, 0, 0);
+	Stardate sd5 = Stardate::fromDate(ChristianDate(1988, 1, 27));
 	Stardate sd6(2447332.0);
-	Stardate sd7 = Stardate::fromDate(1900, 1, 1, 0, 0, 0);
+	Stardate sd7 = Stardate::fromDate(ChristianDate(1900, 1, 1));
 	Stardate sd8(2305447.5);
-	Stardate sd9 = Stardate::fromDate(1600, 12, 31, 0, 0, 0);
+	Stardate sd9 = Stardate::fromDate(ChristianDate(1600, 12, 31));
 	Stardate sd10(2026871.8);
-	Stardate sd11 = Stardate::fromDate(-123, 12, 31, 0, 0, 0);
+	Stardate sd11 = Stardate::fromDate(ChristianDate(-123, 12, 31));
 	Stardate sd12(1676497.5);
-	Stardate sd13 = Stardate::fromDate(-1000, 7, 12, 12, 0, 0);
+	Stardate sd13 = Stardate::fromDate(ChristianDate(-1000, 7, 12, 12, 0, 0));
 	Stardate sd14(1355866.5);
 	Stardate sd15(1355671.4);
-	Stardate sd16 = Stardate::fromDate(-4712, 1, 1, 12, 0, 0);
+	Stardate sd16 = Stardate::fromDate(ChristianDate(-4712, 1, 1, 12, 0, 0));
 	Stardate sd17(2436116.31);
 
 	cout << "sd1 = " << sd1.toGregorianDateStr() << ", " << sd1.toJD() << endl;

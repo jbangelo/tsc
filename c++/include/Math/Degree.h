@@ -49,6 +49,11 @@ namespace Math
 			Degree(real value);
 
 			/**
+			 * Creates a Degree object with the default value of 0.0
+			 */
+			Degree();
+
+			/**
 			 * Destroys a Degree object
 			 */
 			~Degree();
@@ -57,6 +62,16 @@ namespace Math
 			 * Creates a Degree object from a raw radian value
 			 */
 			static Degree fromRad(real value);
+
+			/**
+			 * Creates a Degree object from raw degree arcminute and arcsecond values
+			 */
+			static Degree fromDMS(real deg, real arcminute, real arcsecond);
+
+			/**
+			 * Creates a Degree object from raw hour minute and second values
+			 */
+			static Degree fromHMS(real hour, real minute, real second);
 
 			/**
 			 * Retrieves the raw floating point value of the Degree object
@@ -144,6 +159,10 @@ namespace Math
 			Degree operator-(const Degree& param);
 			Degree operator*(const Degree& param);
 			Degree operator/(const Degree& param);
+			Degree operator+=(const Degree& param);
+			Degree operator-=(const Degree& param);
+			Degree operator*=(const Degree& param);
+			Degree operator/=(const Degree& param);
 			bool operator<=(const Degree& param);
 			bool operator>=(const Degree& param);
 			bool operator==(const Degree& param);

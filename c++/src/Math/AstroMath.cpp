@@ -112,4 +112,8 @@ real AstroMath::log10(real x)
 	return log10(x);
 }
 
+real AstroMath::pow(real base, real power)
+{
+	return pow(base,power);
+}
 

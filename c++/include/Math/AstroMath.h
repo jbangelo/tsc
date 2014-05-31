@@ -55,6 +55,7 @@ namespace Math
 			static real arctangent2(real x, real y);
 			static real sqrt(real x);
 			static real log10(real x);
+			static real pow(real base, real power);
 	};
 }
 }
