@@ -31,10 +31,12 @@
 #ifndef STARDATE_H_
 #define STARDATE_H_
 
-#include <stdint>
+#include <stdint.h>
+#include <string>
+#include "Math/AstroMath.h"
 #include "Math/Degree.h"
 
-usign tsc::Math::Degree;
+using tsc::Math::Degree;
 
 namespace tsc
 {
@@ -43,24 +45,45 @@ namespace Time
 	class Stardate
 	{
 		public:
-			Stardate(long int date, int time);
+			Stardate(real JD);
 			~Stardate();
-			void addDays(long int days);
-			float toJulianDate();
-			long int toJulianDate();
-			long long int J2000();
-			long int J2000c();
-			long int J2000m();
+			static Stardate fromDate(integer year, integer month, integer day, integer hour, integer minute, integer second);
+			static Stardate fromJulianDate(integer year, integer month, integer day, integer hour, integer minute, integer second);
+			static Stardate fromGregorianDate(integer year, integer month, integer day, integer hour, integer minute, integer second);
+			void addDays(integer days);
+			real toJD();
+			real J2000();
+			real J2000c();
+			real J2000m();
 			bool isJulian();
 			bool isGregorian();
 			Degree meanSidereal();
-			void nutation(double& dPsi, double& dE);
-			double meanObliquity();
-			double apparentSidereal();
+			void nutation(real& dPsi, real& dE);
+			real meanObliquity();
+			real apparentSidereal();
+
+			void toGregorianDate(integer& year, integer& month, real& day);
+			void toGregorianDate(integer& year, integer& month, integer& day,
+				integer& hour, integer& minute, integer& second);
+			std::string toGregorianDateStr();
+
+			bool operator==(Stardate& param);
+			bool operator!=(Stardate& param);
+			bool operator<(Stardate& param);
+			bool operator>(Stardate& param);
+			bool operator<=(Stardate& param);
+			bool operator>=(Stardate& param);
+			bool operator==(const Stardate& param);
+			bool operator!=(const Stardate& param);
+			bool operator<(const Stardate& param);
+			bool operator>(const Stardate& param);
+			bool operator<=(const Stardate& param);
+			bool operator>=(const Stardate& param);
 		private:
-			long int _date;
-			long int _time;
+			real _JD;
 	};
+
+	const Stardate GREGORIAN_START(2298883.5);
 }
 }
 

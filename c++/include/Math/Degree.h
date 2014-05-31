@@ -31,6 +31,7 @@
 #define DEGREE_H_
 
 #include <string>
+#include "Math/AstroMath.h"
 
 namespace tsc
 {
@@ -45,7 +46,7 @@ namespace Math
 			/**
 			 * Creates a Degree object from a raw degree value
 			 */
-			Degree(long double value);
+			Degree(real value);
 
 			/**
 			 * Destroys a Degree object
@@ -53,14 +54,19 @@ namespace Math
 			~Degree();
 
 			/**
+			 * Creates a Degree object from a raw radian value
+			 */
+			static Degree fromRad(real value);
+
+			/**
 			 * Retrieves the raw floating point value of the Degree object
 			 */
-			long double deg();
+			real deg();
 
 			/**
 			 * Retreives the raw floating point value of the Degree object converted into radians
 			 */
-			long double rad();
+			real rad();
 
 			/**
 			 * Changes the value of the Degree object to be the absolute value of itself
@@ -70,27 +76,27 @@ namespace Math
 			/**
 			 * Retreives the arcMinute value of the Degree object
 			 */
-			long int arcMinute();
+			integer arcMinute();
 
 			/**
 			 * Retrieves the arcSecond value of the Degree object
 			 */
-			long double arcSecond();
+			real arcSecond();
 
 			/**
 			 * Retreives the hour value of the Degree object
 			 */
-			long int hour();
+			integer hour();
 
 			/**
 			 * Retrieves the minute value of the Degree object
 			 */
-			long int minute();
+			integer minute();
 
 			/**
 			 * Retreives the second value of the Degree object
 			 */
-			long double second();
+			real second();
 
 			/**
 			 * Gets the string representation of the Degree object
@@ -127,32 +133,34 @@ namespace Math
 			 */
 			void normalize();
 
-			static long double sin(Degree& param);
-			static long double cos(Degree& param);
-			static long double tan(Degree& param);
-			static Degree asin(long double param);
-			static Degree acos(long double param);
-			static Degree atan(long double param);
-			static Degree atan2(long double param1, long double param2);
+			static real sin(Degree& param);
+			static real cos(Degree& param);
+			static real tan(Degree& param);
+			static Degree asin(real param);
+			static Degree acos(real param);
+			static Degree atan(real param);
+			static Degree atan2(real param1, real param2);
 			Degree operator+(const Degree& param);
 			Degree operator-(const Degree& param);
 			Degree operator*(const Degree& param);
 			Degree operator/(const Degree& param);
-			Degree operator<=(const Degree& param);
-			Degree operator>=(const Degree& param);
-			Degree operator==(const Degree& param);
+			bool operator<=(const Degree& param);
+			bool operator>=(const Degree& param);
+			bool operator==(const Degree& param);
 		private:
-			long double _value;
+			void updateDMS();
+			void updateHMS();
+			real _value;
 
-			long int _degree;
-			long double _arcFraction;
-			long int _arcMinute;
-			long double _arcSecond;
+			integer _degree;
+			real _arcFraction;
+			integer _arcMinute;
+			real _arcSecond;
 
-			long int _hour;
-			long double _fraction;
-			long int _minute;
-			long double _second;
+			integer _hour;
+			real _fraction;
+			integer _minute;
+			real _second;
 	};
 }
 }

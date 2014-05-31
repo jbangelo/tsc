@@ -1,7 +1,7 @@
 CXX=g++
 
 BIN=tsc
-CXXSOURCES=
+CXXSOURCES=src/main.cpp src/Math/Degree.cpp src/Math/AstroMath.cpp src/Time/Stardate.cpp
 OBJECTS=$(CSOURCES:.c=.o) $(CXXSOURCES:.cpp=.o)
 
 # Compiler Flags:
