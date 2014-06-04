@@ -1,0 +1,85 @@
+/**
+ * File: SkyObject.cpp
+ * Project: tsc - TinyStarChart
+ * Creator: jbangelo
+ *
+ * Description: Defines an interface for all sky object objects
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2014 jbangelo
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+#include "SkyObject/SkyObject.h"
+#include "Math/AstroMath.h"
+
+using tsc::SkyObject::SkyObject;
+using tsc::Math::AstroMath;
+
+SkyObject::SkyObject() : 
+	_name(""),
+	_rd(0.0, 0.0),
+	_M(0.0),
+	_dist(0.0)
+{
+
+}
+
+SkyObject::~SkyObject()
+{
+
+}
+
+std::string SkyObject::getName()
+{
+	return _name;
+}
+
+AltAz SkyObject::getAltAz(LatLng location, Stardate date)
+{
+	AltAz aa;
+	real x,y;
+
+	Degree H = date.apparentSidereal() - location.lng - this->_rd.alpha;
+	H.normalize();
+	
+	y = Degree::sin(H);
+	x = Degree::cos(H)*Degree::sin(location.lat) - Degree::tan(this->_rd.delta)*Degree::cos(location.lat);
+	aa.az = Degree::atan2(y, x);
+	aa.alt = Degree::asin(Degree::sin(location.lat)*Degree::sin(this->_rd.delta) + Degree::cos(location.lat)*Degree::cos(this->_rd.delta)*Degree::cos(H));
+
+	return aa;
+}
+
+RaDec SkyObject::getRaDec()
+{
+	return this->_rd;
+}
+
+real SkyObject::getMag()
+{
+	return _M;
+}
+
+real SkyObject::getDistance()
+{
+	return _dist;
+}
+
