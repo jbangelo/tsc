@@ -38,25 +38,45 @@ namespace tsc
 {
 namespace Math
 {
-	typedef struct AltAz
+	typedef struct HorizontalCoords
 	{
 		Degree alt;
 		Degree az;
 
-		AltAz() : alt(0.0), az(0.0) { };
-		AltAz(Degree _alt, Degree _az) : alt(_alt), az(_az) { };
-		AltAz(real _alt, real _az) : alt(_alt), az(_az) { };
-	} AltAz;
+		HorizontalCoords() : alt(0.0), az(0.0) { };
+		HorizontalCoords(Degree _alt, Degree _az) : alt(_alt), az(_az) { };
+		HorizontalCoords(real _alt, real _az) : alt(_alt), az(_az) { };
+	} HorizontalCoords;
 
-	typedef struct RaDec
+	typedef struct EquatorialCoords
 	{
-		Degree alpha; // RA
-		Degree delta; // Dec
+		Degree ra;
+		Degree dec; // Dec
 
-		RaDec() : alpha(0.0), delta(0.0) { };
-		RaDec(Degree _alpha, Degree _delta) : alpha(_alpha), delta(_delta) { };
-		RaDec(real _alpha, real _delta) : alpha(_alpha), delta(_delta) { };
-	} RaDec;
+		EquatorialCoords() : ra(0.0), dec(0.0) { };
+		EquatorialCoords(Degree _ra, Degree _dec) : ra(_ra), dec(_dec) { };
+	} EquatorialCoords;
+
+	typedef struct EclipticCoords
+	{
+		Degree lambda; // longitude
+		Degree beta; // latitude
+		real delta; // distace
+
+		EclipticCoords() : lambda(0.0), beta(0.0), delta(0.0) { };
+		EclipticCoords(Degree _lambda, Degree _beta) : lambda(_lambda), beta(_beta), delta(0.0) { };
+		EclipticCoords(Degree _lambda, Degree _beta, real _delta) : lambda(_lambda), beta(_beta), delta(_delta) { };
+	} EclipticCoords;
+
+	typedef struct CartesianCoords
+	{
+		real x;
+		real y;
+		real z;
+
+		CartesianCoords() : x(0.0), y(0.0), z(0.0) { };
+		CartesianCoords(real _x, real _y, real _z) : x(_x), y(_y), z(_z) { };
+	} CartesianCoords;
 
 	typedef struct LatLng
 	{
@@ -67,6 +87,18 @@ namespace Math
 		LatLng(Degree _lat, Degree _lng) : lat(_lat), lng(_lng) { };
 		LatLng(real _lat, real _lng) : lat(_lat), lng(_lng) { };
 	} LatLng;
+
+	typedef struct OrbitalTerm
+	{
+		real A;
+		real B;
+		real C;
+
+		OrbitalTerm() : A(0.0), B(0.0), C(0.0) { };
+		OrbitalTerm(real _A, real _B, real _C) : A(_A), B(_B), C(_C) { };
+	} OrbitalTerm;
+
+	
 }
 }
 

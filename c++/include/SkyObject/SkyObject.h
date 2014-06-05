@@ -34,8 +34,8 @@
 #include "Math/Units.h"
 #include "Time/Stardate.h"
 
-using tsc::Math::RaDec;
-using tsc::Math::AltAz;
+using tsc::Math::EquatorialCoords;
+using tsc::Math::HorizontalCoords;
 using tsc::Math::LatLng;
 using tsc::Time::Stardate;
 
@@ -48,14 +48,14 @@ namespace SkyObject
 		public:
 			SkyObject();
 			virtual ~SkyObject();
-			virtual std::string getName();
-			virtual AltAz getAltAz(LatLng location, Stardate date);
-			virtual RaDec getRaDec();
-			virtual real getMag();
-			virtual real getDistance();
+			std::string getName();
+			virtual HorizontalCoords getHorizontalCoords(LatLng location, Stardate date);
+			EquatorialCoords getGeocentricEquatorialCoords();
+			real getMag();
+			real getDistance();
 		protected:
 			std::string _name;
-			RaDec _rd;
+			EquatorialCoords _geocentricEquatorial;
 			real _M;
 			real _dist;
 	};
