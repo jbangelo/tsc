@@ -40,7 +40,7 @@ namespace Math
 	class AstroMath
 	{
 		public:
-			static const real pi = 3.14159265358979323846264338327950288419716939937510582L;
+			static constexpr real pi = 3.14159265358979323846264338327950288419716939937510582L;
 
 			static integer FIX(real x);
 			static integer INT(real x);

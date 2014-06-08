@@ -31,6 +31,7 @@
 #define PLANET_H_
 
 #include <vector>
+#include "sqlite3.h"
 #include "SkyObject/SkyObject.h"
 #include "Math/Degree.h"
 #include "Math/Units.h"
@@ -50,7 +51,19 @@ namespace SkyObject
 	class Planet : public SkyObject
 	{
 		public:
-			Planet();
+			enum PlanetCode
+			{
+				MERCURY = 100,
+				VENUS = 200,
+				EARTH = 300,
+				MARS = 400,
+				JUPITER = 500,
+				SATURN = 600,
+				URANUS = 700,
+				NEPTUNE = 800,
+			};
+
+			Planet(PlanetCode pid, sqlite3* db);
 			~Planet();
 			void calculatePosition(Stardate date);
 			EclipticCoords getHeliocentricEclipticCoords();
@@ -61,14 +74,18 @@ namespace SkyObject
 			Degree getPhaseAngle();
 			
 		protected:
-			static real sumTerms(vector<vector<OrbitalTerm> > terms, real millenia);
+			bool loadData();
+			static real sumTerms(vector<vector<OrbitalTerm>*> terms, real millenia);
 			void calculateHeliocentricEclipticCoords(real millenia);
 			void calculateGeocentricCartesianCoords();
 			void calculateGeocentricEclipticCoords();
 			void calculateGeocentricEquatorialCoords();
 			void calculateLightDelay(Stardate date);
 			void calculateIlluminatedFraction();
-			virtual void calcMag() = 0;
+			void calcMag();
+
+			PlanetCode _pid;
+			sqlite3* _db;
 			
 			// Heliocentric Ecliptic Coordinates
 			EclipticCoords _heliocentricEcliptic;
@@ -92,12 +109,14 @@ namespace SkyObject
 			CartesianCoords _geocentricCartesianDelay;
 			EclipticCoords _geocentricEclipticDelay;
 
-			vector<vector<OrbitalTerm> > _LTerms;
-			vector<vector<OrbitalTerm> > _BTerms;
-			vector<vector<OrbitalTerm> > _RTerms;
+			vector<vector<OrbitalTerm>*> _LTerms;
+			vector<vector<OrbitalTerm>*> _BTerms;
+			vector<vector<OrbitalTerm>*> _RTerms;
+			//OrbitalTerm** _LTerms;
+			//OrbitalTerm** _BTerms;
+			//OrbitalTerm** _RTerms;
 
-			Stardate _lastUsedDate;
-	};
+			Stardate _lastUsedDate;	};
 }
 }
 

@@ -27,14 +27,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <iostream>
+#include <string>
 #include "SkyObject/Planet.h"
 #include "Math/AstroMath.h"
 
 using tsc::SkyObject::Planet;
 using tsc::Math::AstroMath;
 
-Planet::Planet() : 
+Planet::Planet(PlanetCode pid, sqlite3* db) : 
 	SkyObject(),
+	_pid(pid),
+	_db(db),
 	_heliocentricEcliptic(),
 	_geocentricCartesian(),
 	_geocentricEcliptic(),
@@ -49,7 +53,15 @@ Planet::Planet() :
 	_RTerms(),
 	_lastUsedDate(0)
 {
-
+	//vector<OrbitalTerm> l,b,r;
+	//_LTerms.push_back(l);
+	//_BTerms.push_back(b);
+	//_RTerms.push_back(r);
+	_LTerms.resize(5);
+	_BTerms.resize(5);
+	_RTerms.resize(5);
+	
+	loadData();
 }
 
 Planet::~Planet()
@@ -100,18 +112,18 @@ Degree Planet::getPhaseAngle()
 	return _i;
 }
 
-real Planet::sumTerms(vector<vector<OrbitalTerm> > terms, real millenia)
+real Planet::sumTerms(vector<vector<OrbitalTerm>*> terms, real millenia)
 {
 	real total = 0.0;
 
 	for (size_t i = 0; i < terms.size(); i++)
 	{
 		real subTerm = 0.0;
-		for (size_t j = 0; j < terms[i].size(); j++)
+		for (size_t j = 0; j < terms[i]->size(); j++)
 		{
-			real A = terms[i][j].A;
-			real B = terms[i][j].B;
-			real C = terms[i][j].C;
+			real A = terms[i]->at(j).A;
+			real B = terms[i]->at(j).B;
+			real C = terms[i]->at(j).C;
 			subTerm += A*AstroMath::cosine(B + C*millenia);
 		}
 		total += subTerm*AstroMath::pow(millenia, static_cast<real>(i));
@@ -193,4 +205,83 @@ void Planet::calculateIlluminatedFraction()
 
 	_k = (1 + Degree::cos(_i))/2;
 }
-			
+
+void Planet::calcMag()
+{
+
+}
+
+bool Planet::loadData()
+{
+	sqlite3_stmt *preparedStatement;
+	const std::string sqlStatement1("SELECT rank,A,B,C FROM planets WHERE tid=");
+	const std::string sqlStatement2(" ORDER BY rank DESC;");
+
+	for (int lbr = 0; lbr < 3; lbr++)
+	{
+		int order = 0;
+		do
+		{
+			int tid = 4000 + static_cast<int>(_pid) + ((lbr+1)*10) + order;
+			std::string sqlStatement = sqlStatement1 + std::to_string(tid) + sqlStatement2;
+			int returnCode;
+
+			if (sqlite3_prepare_v2(_db, sqlStatement.c_str(), sqlStatement.length(), &preparedStatement, NULL) != SQLITE_OK)
+			{
+				return false;
+			}
+			if (preparedStatement == NULL)
+			{
+				return false;
+			}
+
+			vector<OrbitalTerm> *orderNTerms = new vector<OrbitalTerm>;
+			returnCode = sqlite3_step(preparedStatement);
+			while (returnCode == SQLITE_ROW)
+			{
+				unsigned int rank;
+				OrbitalTerm term;
+				rank = sqlite3_column_int(preparedStatement, 0);
+				term.A = sqlite3_column_double(preparedStatement, 1);
+				term.B = sqlite3_column_double(preparedStatement, 2);
+				term.C = sqlite3_column_double(preparedStatement, 3);
+
+				if (rank > orderNTerms->capacity())
+				{
+					orderNTerms->resize(rank);
+				}
+
+				orderNTerms->at(rank-1) = term;
+				returnCode = sqlite3_step(preparedStatement);
+			}
+
+			std::cout << "Order " << order << " terms are " << orderNTerms->size() << " elements long." << std::endl;
+
+			switch(lbr)
+			{
+				case 0:
+					_LTerms.push_back(orderNTerms);
+					break;
+				case 1:
+					_BTerms.push_back(orderNTerms);
+					break;
+				case 2:
+					_RTerms.push_back(orderNTerms);
+					break;
+			}
+
+			sqlite3_finalize(preparedStatement);
+
+			if (returnCode == SQLITE_DONE)
+			{
+				order++;
+			}
+			else
+			{
+				std::cerr << "Error accessing database: " << /*sqlite3_errstr(returnCode) <<*/ std::endl;
+				return false;
+			}
+		} while (order < 6);
+	}
+	return true;
+}

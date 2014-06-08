@@ -29,12 +29,15 @@
  */
 
 #include <iostream>
+#include "sqlite3.h"
 #include "Math/Degree.h"
 #include "Time/Stardate.h"
+#include "SkyObject/Planet.h"
 
 using tsc::Math::Degree;
 using tsc::Time::Stardate;
 using tsc::Time::ChristianDate;
+using tsc::SkyObject::Planet;
 using namespace std;
 
 int main(int argc, char** argv)
@@ -85,6 +88,31 @@ int main(int argc, char** argv)
 	cout << "sd15 = " << sd15.toGregorianDateStr() << ", " << sd15.toJD() << endl;
 	cout << "sd16 = " << sd16.toGregorianDateStr() << ", " << sd16.toJD() << endl;
 	cout << "sd16 = " << sd17.toGregorianDateStr() << ", " << sd17.toJD() << endl;
+
+	sqlite3* db;
+
+	if (sqlite3_open("../resources/Planets/planet.db", &db) != SQLITE_OK)
+	{
+		cout << "Error opening up the database file!" << endl;
+		return 1;
+	}
+
+	cout << "Mercury:" << endl;
+	Planet mercury(Planet::MERCURY, db);
+	cout << "Venus:" << endl;
+	Planet venus(Planet::VENUS, db);
+	cout << "Earth:" << endl;
+	Planet earth(Planet::EARTH, db);
+	cout << "Mars:" << endl;
+	Planet mars(Planet::MARS, db);
+	cout << "Jupiter:" << endl;
+	Planet jupiter(Planet::JUPITER, db);
+	cout << "Saturn:" << endl;
+	Planet saturn(Planet::SATURN, db);
+	cout << "Uranus:" << endl;
+	Planet uranus(Planet::URANUS, db);
+	cout << "Neptune:" << endl;
+	Planet neptune(Planet::NEPTUNE, db);
 
 	return 0;
 }
