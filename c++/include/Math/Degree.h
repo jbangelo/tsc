@@ -144,9 +144,13 @@ namespace Math
 			std::string hmsStr();
 
 			/**
-			 * Rounds the value of the Degree object such that 0.0 < value < 360.0
+			 * Rounds the value of the Degree object such that 0.0 <= value < 360.0
 			 */
 			void normalize();
+			/**
+			 * Rounds the value of the Degree object such that -90 <= value <= +90
+			 */
+			void normalizeLatitude();
 
 			static real sin(Degree& param);
 			static real cos(Degree& param);

@@ -68,6 +68,7 @@ namespace Time
 			real J2000();
 			real J2000c();
 			real J2000m();
+			real J2000m(real dt);
 			bool isJulian();
 			bool isGregorian();
 			Degree meanSidereal();

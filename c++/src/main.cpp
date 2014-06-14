@@ -29,6 +29,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 #include "sqlite3.h"
 #include "Math/Degree.h"
 #include "Time/Stardate.h"
@@ -45,6 +46,7 @@ int main(int argc, char** argv)
 	Degree d1(90.0), d2(-90.0);
 
 	cout.setf(ostream::fixed);
+	cout << std::setprecision(10);
 
 	cout << "d1 = " << d1.degStr() << endl;
 	cout << "d2 = " << d2.hmsStr() << endl;
@@ -97,22 +99,41 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	cout << "Mercury:" << endl;
-	Planet mercury(Planet::MERCURY, db);
-	cout << "Venus:" << endl;
-	Planet venus(Planet::VENUS, db);
-	cout << "Earth:" << endl;
-	Planet earth(Planet::EARTH, db);
-	cout << "Mars:" << endl;
-	Planet mars(Planet::MARS, db);
-	cout << "Jupiter:" << endl;
-	Planet jupiter(Planet::JUPITER, db);
-	cout << "Saturn:" << endl;
-	Planet saturn(Planet::SATURN, db);
-	cout << "Uranus:" << endl;
-	Planet uranus(Planet::URANUS, db);
-	cout << "Neptune:" << endl;
-	Planet neptune(Planet::NEPTUNE, db);
+	cout << "Loading planetary data..." << endl;
+	Planet earth(Planet::EARTH, db, NULL);
+	Planet mercury(Planet::MERCURY, db, &earth);
+	Planet venus(Planet::VENUS, db, &earth);
+	Planet mars(Planet::MARS, db, &earth);
+	Planet jupiter(Planet::JUPITER, db, &earth);
+	Planet saturn(Planet::SATURN, db, &earth);
+	Planet uranus(Planet::URANUS, db, &earth);
+	Planet neptune(Planet::NEPTUNE, db, &earth);
+
+	Stardate mercDate(2305445.0);
+	cout << "Calculateing the position of Mercury at " << mercDate.toGregorianDateStr() << endl;
+	mercury.calculatePosition(mercDate);
+	EclipticCoords mercCoords = mercury.getHeliocentricEclipticCoords();
+	cout << "L = " << mercCoords.lambda.rad() << endl;
+	cout << "B = " << mercCoords.beta.rad() << endl;
+	cout << "R = " << mercCoords.delta << endl << endl;
+
+	Stardate venusDate(2378495.0);
+	cout << "Calculateing the position of Venus at " << venusDate.toGregorianDateStr() << endl;
+	venus.calculatePosition(venusDate);
+	EclipticCoords venusCoords = venus.getHeliocentricEclipticCoords();
+	cout << "L = " << venusCoords.lambda.rad() << endl;
+	cout << "B = " << venusCoords.beta.rad() << endl;
+	cout << "R = " << venusCoords.delta << endl;
+
+	Stardate earthDate(2341970.0);
+	cout << "Calculateing the position of Earth at " << earthDate.toGregorianDateStr() << endl;
+	earth.calculatePosition(earthDate);
+	EclipticCoords earthCoords = earth.getHeliocentricEclipticCoords();
+	cout << "L = " << earthCoords.lambda.rad() << endl;
+	cout << "B = " << earthCoords.beta.rad() << endl;
+	cout << "R = " << earthCoords.delta << endl;
+
+	sqlite3_close(db);
 
 	return 0;
 }

@@ -113,7 +113,12 @@ real Stardate::J2000c()
 
 real Stardate::J2000m()
 {
-	return this->J2000()/365250.0L;
+	return J2000m(0.0);
+}
+
+real Stardate::J2000m(real dt)
+{
+	return (J2000() - dt)/365250.0L;
 }
 
 bool Stardate::isJulian()
@@ -186,7 +191,7 @@ Degree Stardate::meanObliquity()
 	real T = this->J2000c();
 	real U = T/100.0;
 
-	Degree E0 = Degree::fromDMS(23,26,21.448)-Degree::fromDMS(0,0,4680.93)*U - 1.55*U*U + 1999.25*U*U*U - 51.38*AstroMath::pow(U,4) - 249.67*AstroMath::pow(U,5) - 39.05*AstroMath::pow(U,6) + 7.12*AstroMath::pow(U,7) + 27.87*AstroMath::pow(U,8) + 5.79*AstroMath::pow(U,9) + 2.45*AstroMath::pow(U,10);
+	Degree E0 = Degree::fromDMS(23,26,21.448)-Degree::fromDMS(0,0,4680.93)*U - 1.55*U*U + 1999.25*U*U*U - 51.38*AstroMath::power(U,4) - 249.67*AstroMath::power(U,5) - 39.05*AstroMath::power(U,6) + 7.12*AstroMath::power(U,7) + 27.87*AstroMath::power(U,8) + 5.79*AstroMath::power(U,9) + 2.45*AstroMath::power(U,10);
 
 	return E0;
 }

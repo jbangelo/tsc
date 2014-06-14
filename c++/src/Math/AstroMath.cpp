@@ -40,14 +40,7 @@ integer AstroMath::FIX(real x)
 
 integer AstroMath::INT(real x)
 {
-	if (x < 0)
-	{
-		return FIX(x)-1;
-	}
-	else
-	{
-		return FIX(x);
-	}
+	return floor(x);
 }
 
 real AstroMath::absoluteValue(real x)
@@ -102,7 +95,7 @@ real AstroMath::arctangent2(real x, real y)
 	return atan2(x,y);
 }
 
-real AstroMath::sqrt(real x)
+real AstroMath::squareRoot(real x)
 {
 	return sqrt(x);
 }
@@ -112,8 +105,12 @@ real AstroMath::log10(real x)
 	return log10(x);
 }
 
-real AstroMath::pow(real base, real power)
+real AstroMath::power(real base, real power)
 {
+	if (power == 0.0)
+	{
+		return 1.0;
+	}
 	return pow(base,power);
 }
 

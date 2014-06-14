@@ -63,36 +63,38 @@ namespace SkyObject
 				NEPTUNE = 800,
 			};
 
-			Planet(PlanetCode pid, sqlite3* db);
+			Planet(PlanetCode pid, sqlite3* db, Planet* earth);
 			~Planet();
-			void calculatePosition(Stardate date);
-			EclipticCoords getHeliocentricEclipticCoords();
-			EclipticCoords getGeocentricEclipticCoords();
-			CartesianCoords getGeocentricCartesianCoords();
-			real getLightDelay();
-			real getIlluminatedFraction();
-			Degree getPhaseAngle();
+			virtual void calculatePosition(Stardate date);
+			virtual EclipticCoords getHeliocentricEclipticCoords();
+			virtual EclipticCoords getGeocentricEclipticCoords();
+			virtual CartesianCoords getGeocentricCartesianCoords();
+			virtual real getLightDelay();
+			virtual real getIlluminatedFraction();
+			virtual Degree getPhaseAngle();
 			
 		protected:
-			bool loadData();
+			virtual bool loadData();
 			static real sumTerms(vector<vector<OrbitalTerm>*> terms, real millenia);
-			void calculateHeliocentricEclipticCoords(real millenia);
-			void calculateGeocentricCartesianCoords();
-			void calculateGeocentricEclipticCoords();
-			void calculateGeocentricEquatorialCoords();
-			void calculateLightDelay(Stardate date);
-			void calculateIlluminatedFraction();
-			void calcMag();
+			virtual EclipticCoords calculateHeliocentricEclipticCoords(real millenia);
+			virtual CartesianCoords calculateGeocentricCartesianCoords(EclipticCoords heliocentricCoords);
+			virtual EclipticCoords calculateGeocentricEclipticCoords(CartesianCoords geocentricCoords);
+			virtual EquatorialCoords calculateGeocentricEquatorialCoords(EclipticCoords geocentricCoords);
+			virtual void calculateLightDelay(Stardate date);
+			virtual void calculateIlluminatedFraction();
+			virtual void calcMag();
 
 			PlanetCode _pid;
 			sqlite3* _db;
+			Planet* _earth;
 			
-			// Heliocentric Ecliptic Coordinates
+			// Heliocentric Coordinates
 			EclipticCoords _heliocentricEcliptic;
 
-			// Geocentric Ecliptic Coordinates
+			// Geocentric Coordinates
 			CartesianCoords _geocentricCartesian;
 			EclipticCoords _geocentricEcliptic;
+			EquatorialCoords _geocentricEquatorial;
 
 			// Phase angle to earth
 			Degree _i;
