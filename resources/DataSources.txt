@@ -1,6 +1,7 @@
-Messier Database: http://www.seds.org/messier/
+Messier Database: http://files.seds.org/pub/info/messier/
 Astroids (Minor Planets): http://www.minorplanetcenter.net/iau/MPCORB.html
 Comets: http://www.minorplanetcenter.net/iau/Ephemerides/Comets/index.html
 NGC 2000.0: ftp://cdsarc.u-strasbg.fr/pub/cats/VII/118/ngc2000.dat
 Stars (HYG): http://www.astronexus.com/hyg
 Planets: ftp://ftp.imcce.fr/pub/ephem/planets/vsop87/
+Moon: ftp://ftp.imcce.fr/pub/ephem/moon/elp82b/
