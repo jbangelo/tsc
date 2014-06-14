@@ -53,9 +53,9 @@ namespace Math
 			static real arccosine(real x);
 			static real arctangent(real x);
 			static real arctangent2(real x, real y);
-			static real sqrt(real x);
+			static real squareRoot(real x);
 			static real log10(real x);
-			static real pow(real base, real power);
+			static real power(real base, real power);
 	};
 }
 }
