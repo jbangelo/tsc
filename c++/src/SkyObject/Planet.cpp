@@ -50,8 +50,7 @@ Planet::Planet(PlanetCode pid, sqlite3* db, Planet* earth) :
 	_geocentricEclipticDelay(),
 	_LTerms(),
 	_BTerms(),
-	_RTerms(),
-	_lastUsedDate(0)
+	_RTerms()
 {
 	if (pid == EARTH)
 	{

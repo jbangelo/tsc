@@ -53,6 +53,7 @@ namespace SkyObject
 		public:
 			enum PlanetCode
 			{
+				SUN = -100,
 				MERCURY = 100,
 				VENUS = 200,
 				EARTH = 300,
@@ -94,7 +95,6 @@ namespace SkyObject
 			// Geocentric Coordinates
 			CartesianCoords _geocentricCartesian;
 			EclipticCoords _geocentricEcliptic;
-			EquatorialCoords _geocentricEquatorial;
 
 			// Phase angle to earth
 			Degree _i;
@@ -114,11 +114,7 @@ namespace SkyObject
 			vector<vector<OrbitalTerm>*> _LTerms;
 			vector<vector<OrbitalTerm>*> _BTerms;
 			vector<vector<OrbitalTerm>*> _RTerms;
-			//OrbitalTerm** _LTerms;
-			//OrbitalTerm** _BTerms;
-			//OrbitalTerm** _RTerms;
-
-			Stardate _lastUsedDate;	};
+	};
 }
 }
 

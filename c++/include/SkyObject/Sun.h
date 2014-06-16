@@ -1,9 +1,9 @@
 /**
- * File: SkyObject.h
+ * File: Sun.h
  * Project: tsc - TinyStarChart
  * Creator: jbangelo
  *
- * Description: Defines an interface for all sky object objects
+ * Description: Defines an interface for a Sun object to follow
  *
  * The MIT License (MIT)
  *
@@ -27,39 +27,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef SKYOBJECT_H_
-#define SKYOBJECT_H_
+#ifndef SUN_H_
+#define SUN_H_
 
-#include <string>
-#include "Math/Units.h"
-#include "Time/Stardate.h"
+#include "Planet.h"
 
-using tsc::Math::EquatorialCoords;
-using tsc::Math::HorizontalCoords;
-using tsc::Math::LatLng;
-using tsc::Time::Stardate;
+using tsc::SkyObject::Planet;
 
 namespace tsc
 {
 namespace SkyObject
 {
-	class SkyObject
+	class Sun : public Planet
 	{
 		public:
-			SkyObject();
-			virtual ~SkyObject();
-			std::string getName();
-			virtual HorizontalCoords getHorizontalCoords(LatLng location, Stardate date);
-			EquatorialCoords getGeocentricEquatorialCoords();
-			real getMag();
-			real getDistance();
+			Sun(sqlite3* db, Planet* earth);
+			~Sun();
+			virtual void calculatePosition(Stardate date);
+			
 		protected:
-			std::string _name;
-			EquatorialCoords _geocentricEquatorial;
-
-			// Apparent magnitude
-			real _M;
-			real _dist;
+			virtual EclipticCoords calculateHeliocentricEclipticCoords();
+			virtual CartesianCoords calculateGeocentricCartesianCoords(EclipticCoords geocentricCoords, Degree meanObliquity);
+			virtual EclipticCoords calculateGeocentricEclipticCoords();
+			virtual void calculateLightDelay(Stardate date);
+			virtual void calculateIlluminatedFraction();
 	};
 }
 }

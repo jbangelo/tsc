@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 
 	sqlite3* db;
 
-	if (sqlite3_open("../resources/Planets/planet.db", &db) != SQLITE_OK)
+	if (sqlite3_open("../resources/tscdb", &db) != SQLITE_OK)
 	{
 		cout << "Error opening up the database file!" << endl;
 		return 1;
