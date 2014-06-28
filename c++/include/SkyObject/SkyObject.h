@@ -34,6 +34,7 @@
 #include "Math/Units.h"
 #include "Time/Stardate.h"
 
+using std::string;
 using tsc::Math::EquatorialCoords;
 using tsc::Math::HorizontalCoords;
 using tsc::Math::LatLng;
@@ -47,18 +48,20 @@ namespace SkyObject
 	{
 		public:
 			SkyObject();
+			SkyObject(string name, real RA, real Dec, real M, real dist);
 			virtual ~SkyObject();
-			std::string getName();
+			virtual string getName();
 			virtual HorizontalCoords getHorizontalCoords(LatLng location, Stardate date);
-			EquatorialCoords getGeocentricEquatorialCoords();
-			real getMag();
-			real getDistance();
+			virtual EquatorialCoords getGeocentricEquatorialCoords();
+			virtual real getMag();
+			virtual real getDistance();
 		protected:
-			std::string _name;
+			string _name;
 			EquatorialCoords _geocentricEquatorial;
 
 			// Apparent magnitude
 			real _M;
+			// Distance from earth in A.U.
 			real _dist;
 	};
 }

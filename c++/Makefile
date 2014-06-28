@@ -2,7 +2,7 @@ CXX=g++
 CC=gcc
 
 BIN=tsc
-CXXSOURCES=src/main.cpp src/Math/Degree.cpp src/Math/AstroMath.cpp src/Time/Stardate.cpp src/SkyObject/SkyObject.cpp src/SkyObject/Planet.cpp src/SkyObject/Sun.cpp
+CXXSOURCES=src/main.cpp src/Math/Degree.cpp src/Math/AstroMath.cpp src/Time/Stardate.cpp src/SkyObject/SkyObject.cpp src/SkyObject/Planet.cpp src/SkyObject/Sun.cpp src/SkyObject/Star.cpp
 CSOURCES=src/sqlite3.c
 OBJECTS=$(CSOURCES:.c=.o) $(CXXSOURCES:.cpp=.o)
 

@@ -1,9 +1,9 @@
 /**
- * File: SkyObject.cpp
+ * File: Star.h
  * Project: tsc - TinyStarChart
  * Creator: jbangelo
  *
- * Description: Defines an interface for all sky object objects
+ * Description: Defines an interface for Star objects to follow
  *
  * The MIT License (MIT)
  *
@@ -27,68 +27,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#ifndef STAR_H_
+#define STAR_H_
+
+#include <string>
+#include "sqlite3.h"
 #include "SkyObject/SkyObject.h"
-#include "Math/AstroMath.h"
+#include "Math/Units.h"
 
+using std::string;
 using tsc::SkyObject::SkyObject;
-using tsc::Math::AstroMath;
 
-SkyObject::SkyObject() : 
-	_name(""),
-	_geocentricEquatorial(0.0, 0.0),
-	_M(0.0),
-	_dist(0.0)
+namespace tsc
 {
-
+namespace SkyObject
+{
+	class Star : public SkyObject
+	{
+		public:
+			Star(integer starID, integer hip, integer hd, integer hr, string gliese, string bayer, string pName, real RA, real Dec, real dist, real absM);
+			~Star();
+			integer getStarID();
+			integer getHIP();
+			integer getHD();
+			integer getHR();
+			string getGliese();
+			string getBayerFlamsteed();
+			real getAbsMag();
+			
+		protected:
+			// The HYG catalog ID for the star
+			integer _starID;
+			integer _hip;
+			// The Henry Draper catalog ID, or -1 if not know
+			integer _hd;
+			// The Harvard Revised catalog ID, or -1 if not know
+			integer _hr;
+			// The Gliese catalog Third Edition's ID
+			string _gliese;
+			// The Bayer/Flamsteed designation
+			string _bayerFlamsteed;
+			// The Absolute magnitude
+			real _absM;
+	};
+}
 }
 
-SkyObject::SkyObject(string name, real RA, real Dec, real M, real dist) : 
-	_name(name),
-	_geocentricEquatorial(RA, Dec),
-	_M(M),
-	_dist(dist)
-{
-
-}
-
-SkyObject::~SkyObject()
-{
-
-}
-
-std::string SkyObject::getName()
-{
-	return _name;
-}
-
-HorizontalCoords SkyObject::getHorizontalCoords(LatLng location, Stardate date)
-{
-	HorizontalCoords horiz;
-	real x,y;
-
-	Degree H = date.apparentSidereal() - location.lng - _geocentricEquatorial.ra;
-	H.normalize();
-	
-	y = Degree::sin(H);
-	x = Degree::cos(H)*Degree::sin(location.lat) - Degree::tan(_geocentricEquatorial.dec)*Degree::cos(location.lat);
-	horiz.az = Degree::atan2(y, x);
-	horiz.alt = Degree::asin(Degree::sin(location.lat)*Degree::sin(_geocentricEquatorial.dec) + Degree::cos(location.lat)*Degree::cos(_geocentricEquatorial.dec)*Degree::cos(H));
-
-	return horiz;
-}
-
-EquatorialCoords SkyObject::getGeocentricEquatorialCoords()
-{
-	return _geocentricEquatorial;
-}
-
-real SkyObject::getMag()
-{
-	return _M;
-}
-
-real SkyObject::getDistance()
-{
-	return _dist;
-}
-
+#endif

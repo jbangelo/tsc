@@ -1,9 +1,9 @@
 /**
- * File: SkyObject.cpp
+ * File: Star.cpp
  * Project: tsc - TinyStarChart
  * Creator: jbangelo
  *
- * Description: Defines an interface for all sky object objects
+ * Description: Defines an interface for Star objects to follow
  *
  * The MIT License (MIT)
  *
@@ -27,68 +27,67 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "SkyObject/SkyObject.h"
+
+#include "SkyObject/Star.h"
 #include "Math/AstroMath.h"
 
-using tsc::SkyObject::SkyObject;
+using tsc::SkyObject::Star;
 using tsc::Math::AstroMath;
 
-SkyObject::SkyObject() : 
-	_name(""),
-	_geocentricEquatorial(0.0, 0.0),
-	_M(0.0),
-	_dist(0.0)
+Star::Star(integer starID, integer hip, integer hd, integer hr, string gliese, string bayer, string pName, real RA, real Dec, real dist, real absM) : 
+	SkyObject(pName, RA, Dec, 0.0f, 0.0f), 
+	_starID(starID),
+	_hip(hip),
+	_hd(hd),
+	_hr(hr),
+	_gliese(gliese),
+	_bayerFlamsteed(bayer),
+	_absM(absM)
 {
+	// Get the apparent magnitude from the absolute magnitude
+	_M = _absM - 5.0l*(1.0l - AstroMath::log10(dist));
 
+	// Convert the dist (in parsecs) to _dist (in A.U.)
+	_dist = dist*206264.806248l;
 }
 
-SkyObject::SkyObject(string name, real RA, real Dec, real M, real dist) : 
-	_name(name),
-	_geocentricEquatorial(RA, Dec),
-	_M(M),
-	_dist(dist)
+Star::~Star()
 {
-
-}
-
-SkyObject::~SkyObject()
-{
-
-}
-
-std::string SkyObject::getName()
-{
-	return _name;
-}
-
-HorizontalCoords SkyObject::getHorizontalCoords(LatLng location, Stardate date)
-{
-	HorizontalCoords horiz;
-	real x,y;
-
-	Degree H = date.apparentSidereal() - location.lng - _geocentricEquatorial.ra;
-	H.normalize();
 	
-	y = Degree::sin(H);
-	x = Degree::cos(H)*Degree::sin(location.lat) - Degree::tan(_geocentricEquatorial.dec)*Degree::cos(location.lat);
-	horiz.az = Degree::atan2(y, x);
-	horiz.alt = Degree::asin(Degree::sin(location.lat)*Degree::sin(_geocentricEquatorial.dec) + Degree::cos(location.lat)*Degree::cos(_geocentricEquatorial.dec)*Degree::cos(H));
-
-	return horiz;
 }
 
-EquatorialCoords SkyObject::getGeocentricEquatorialCoords()
+integer Star::getStarID()
 {
-	return _geocentricEquatorial;
+	return _starID;
 }
 
-real SkyObject::getMag()
+integer Star::getHIP()
 {
-	return _M;
+	return _hip;
 }
 
-real SkyObject::getDistance()
+integer Star::getHD()
 {
-	return _dist;
+	return _hd;
+}
+
+integer Star::getHR()
+{
+	return _hr;
+}
+
+string Star::getGliese()
+{
+	return _gliese;
+}
+
+string Star::getBayerFlamsteed()
+{
+	return _bayerFlamsteed;
+}
+
+real Star::getAbsMag()
+{
+	return _absM;
 }
 

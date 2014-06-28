@@ -80,6 +80,8 @@ void Planet::calculatePosition(Stardate date)
 	calculateLightDelay(date);
 	calculateIlluminatedFraction();
 	calcMag();
+
+	_dist = _geocentricEclipticDelay.delta;
 }
 
 EclipticCoords Planet::getHeliocentricEclipticCoords()
