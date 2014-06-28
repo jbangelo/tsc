@@ -48,7 +48,7 @@ Star::Star(integer starID, integer hip, integer hd, integer hr, string gliese, s
 	_M = _absM - 5.0l*(1.0l - AstroMath::log10(dist));
 
 	// Convert the dist (in parsecs) to _dist (in A.U.)
-	_dist = dist*206264.806248l;
+	_dist = dist*AstroMath::ParsecToAU;
 }
 
 Star::~Star()
