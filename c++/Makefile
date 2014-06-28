@@ -10,7 +10,7 @@ OBJECTS=$(CSOURCES:.c=.o) $(CXXSOURCES:.cpp=.o)
 #	-c - Compile and assemble, but don't link. Outputs object code
 #	-g - Keep debug information
 #	-Wall - Enable all warnings
-CXXFLAGS=-c -g -Wall -std=c++0x
+CXXFLAGS=-c -g -Wall
 
 # Compiler Pre-processor Flags:
 #	-I - Search this directory for included files

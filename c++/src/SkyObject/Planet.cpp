@@ -31,6 +31,7 @@
 #include <string>
 #include "SkyObject/Planet.h"
 #include "Math/AstroMath.h"
+#include "Utils/ToString.h"
 
 using tsc::SkyObject::Planet;
 using tsc::Math::AstroMath;
@@ -255,7 +256,7 @@ bool Planet::loadData()
 		do
 		{
 			int tid = 4000 + static_cast<int>(_pid) + ((lbr+1)*10) + order;
-			std::string sqlStatement = sqlStatement1 + std::to_string(tid) + sqlStatement2;
+			std::string sqlStatement = sqlStatement1 + TO_STRING(tid) + sqlStatement2;
 			int returnCode;
 
 			if (sqlite3_prepare_v2(_db, sqlStatement.c_str(), sqlStatement.length(), &preparedStatement, NULL) != SQLITE_OK)
