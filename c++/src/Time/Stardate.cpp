@@ -28,7 +28,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#include <iostream>
+#include <iomanip>
 #include <sstream>
 #include "Time/Stardate.h"
 #include "Time/NutationTerms.h"
@@ -96,37 +97,37 @@ void Stardate::addDays(integer days)
 	_JD += days;
 }
 
-real Stardate::toJD()
+real Stardate::toJD() const
 {
 	return _JD;
 }
 
-real Stardate::J2000()
+real Stardate::J2000() const
 {
 	return _JD-2451545.0L;
 }
 
-real Stardate::J2000c()
+real Stardate::J2000c() const
 {
 	return this->J2000()/36525.0L;
 }
 
-real Stardate::J2000m()
+real Stardate::J2000m() const
 {
 	return J2000m(0.0);
 }
 
-real Stardate::J2000m(real dt)
+real Stardate::J2000m(real dt) const
 {
 	return (J2000() - dt)/365250.0L;
 }
 
-bool Stardate::isJulian()
+bool Stardate::isJulian() const
 {
 	return ((*this) < GREGORIAN_START);
 }
 
-bool Stardate::isGregorian()
+bool Stardate::isGregorian() const
 {
 	return !this->isJulian();
 }
@@ -207,7 +208,7 @@ Degree Stardate::apparentSidereal()
 	return this->meanSidereal() + nutation;
 }
 
-ChristianDate Stardate::toGregorianDate()
+ChristianDate Stardate::toGregorianDate() const
 {
 	ChristianDate date(0,0,0,0,0,0);
 	real jdMod = this->_JD + 0.5;
@@ -263,7 +264,7 @@ ChristianDate Stardate::toGregorianDate()
 	return date;
 }
 
-std::string Stardate::toGregorianDateStr()
+std::string Stardate::toGregorianDateStr() const
 {
 	std::string monthStr;
 	std::ostringstream oss;
@@ -321,63 +322,69 @@ std::string Stardate::toGregorianDateStr()
 	return oss.str();
 }
 
-bool Stardate::operator==(Stardate& param)
+bool Stardate::operator==(Stardate& param) const
 {
-	return (this->_JD == param._JD);
+	return ((this->_JD - param._JD) < 0.0001);
 }
 
-bool Stardate::operator!=(Stardate& param)
+bool Stardate::operator!=(Stardate& param) const
 {
-	return (this->_JD != param._JD);
+	return ((this->_JD - param._JD) >= 0.0001);
 }
 
-bool Stardate::operator<(Stardate& param)
-{
-	return (this->_JD < param._JD);
-}
-
-bool Stardate::operator>(Stardate& param)
-{
-	return (this->_JD > param._JD);
-}
-
-bool Stardate::operator<=(Stardate& param)
-{
-	return (this->_JD <= param._JD);
-}
-
-bool Stardate::operator>=(Stardate& param)
-{
-	return (this->_JD >= param._JD);
-}
-
-bool Stardate::operator==(const Stardate& param)
-{
-	return (this->_JD == param._JD);
-}
-
-bool Stardate::operator!=(const Stardate& param)
-{
-	return (this->_JD != param._JD);
-}
-
-bool Stardate::operator<(const Stardate& param)
+bool Stardate::operator<(Stardate& param) const
 {
 	return (this->_JD < param._JD);
 }
 
-bool Stardate::operator>(const Stardate& param)
+bool Stardate::operator>(Stardate& param) const
 {
 	return (this->_JD > param._JD);
 }
 
-bool Stardate::operator<=(const Stardate& param)
+bool Stardate::operator<=(Stardate& param) const
 {
 	return (this->_JD <= param._JD);
 }
 
-bool Stardate::operator>=(const Stardate& param)
+bool Stardate::operator>=(Stardate& param) const
 {
 	return (this->_JD >= param._JD);
 }
 
+bool Stardate::operator==(const Stardate& param) const
+{
+	return ((this->_JD - param._JD) < 0.0001);
+}
+
+bool Stardate::operator!=(const Stardate& param) const
+{
+	return ((this->_JD - param._JD) >= 0.0001);
+}
+
+bool Stardate::operator<(const Stardate& param) const
+{
+	return (this->_JD < param._JD);
+}
+
+bool Stardate::operator>(const Stardate& param) const
+{
+	return (this->_JD > param._JD);
+}
+
+bool Stardate::operator<=(const Stardate& param) const
+{
+	return (this->_JD <= param._JD);
+}
+
+bool Stardate::operator>=(const Stardate& param) const
+{
+	return (this->_JD >= param._JD);
+}
+
+std::ostream& tsc::Time::operator<<(std::ostream& stream, const Stardate& param)
+{
+        //stream << std::setprecision(30);
+	stream << param.toJD() << "(" << param.toGregorianDateStr() << ")";
+	return stream;
+}

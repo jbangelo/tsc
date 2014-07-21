@@ -35,6 +35,9 @@ clean:
 $(TESTBIN): $(TESTOBJECTS) $(OBJECTS)
 	$(CXX) $(TESTOBJECTS) $(filter-out src/main.o,$(OBJECTS)) -o $(TESTBIN) $(LDFLAGS) -lcppunit
 
+test: $(TESTBIN)
+	./$(TESTBIN)
+
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
 
