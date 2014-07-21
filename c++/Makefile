@@ -3,7 +3,7 @@ CC=gcc
 
 BIN=tsc
 CXXSOURCES=src/main.cpp src/Math/Degree.cpp src/Math/AstroMath.cpp src/Time/Stardate.cpp src/SkyObject/SkyObject.cpp src/SkyObject/Planet.cpp src/SkyObject/Sun.cpp src/SkyObject/Star.cpp
-CSOURCES=src/sqlite3.c
+CSOURCES=#src/sqlite3.c
 OBJECTS=$(CSOURCES:.c=.o) $(CXXSOURCES:.cpp=.o)
 
 # Compiler Flags:
@@ -18,13 +18,16 @@ CPPFLAGS=-I$(CURDIR)/include/
 
 # Link Flags:
 #	-g - Keep debug information
-LDFLAGS=-g 
+LDFLAGS=-g -lsqlite3
 
 all: $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(OBJECTS) -o $(BIN)
+	$(CXX) $(OBJECTS) -o $(BIN) $(LDFLAGS)
 
 clean:
 	rm -f $(OBJECTS) $(BIN)
+
+test: $(OBJECTS)
+	$(MAKE) -C test/
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
