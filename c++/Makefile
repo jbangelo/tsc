@@ -3,8 +3,12 @@ CC=gcc
 
 BIN=tsc
 CXXSOURCES=src/main.cpp src/Math/Degree.cpp src/Math/AstroMath.cpp src/Time/Stardate.cpp src/SkyObject/SkyObject.cpp src/SkyObject/Planet.cpp src/SkyObject/Sun.cpp src/SkyObject/Star.cpp
-CSOURCES=#src/sqlite3.c
+CSOURCES=
 OBJECTS=$(CSOURCES:.c=.o) $(CXXSOURCES:.cpp=.o)
+
+TESTBIN=tsc_test
+TESTSOURCES=src/test/test_main.cpp src/test/TestStardate.cpp
+TESTOBJECTS=$(TESTSOURCES:.cpp=.o)
 
 # Compiler Flags:
 #	-c - Compile and assemble, but don't link. Outputs object code
@@ -20,17 +24,17 @@ CPPFLAGS=-I$(CURDIR)/include/
 #	-g - Keep debug information
 LDFLAGS=-g -lsqlite3
 
-all: $(OBJECTS)
+$(BIN): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(BIN) $(LDFLAGS)
 
-clean:
-	rm -f $(OBJECTS) $(BIN)
+all: $(BIN) $(TESTBIN)
 
-test: $(OBJECTS)
-	$(MAKE) -C test/
+clean:
+	rm -f $(OBJECTS) $(BIN) $(TESTOBJECTS) $(TESTBIN)
+
+$(TESTBIN): $(TESTOBJECTS) $(OBJECTS)
+	$(CXX) $(TESTOBJECTS) $(filter-out src/main.o,$(OBJECTS)) -o $(TESTBIN) $(LDFLAGS) -lcppunit
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
 
-src/sqlite3.o : src/sqlite3.c
-	$(CC) -c -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -O2 $< -o $@
