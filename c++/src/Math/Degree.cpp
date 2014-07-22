@@ -214,59 +214,74 @@ Degree Degree::atan2(real param1, real param2)
 	return Degree::fromRad(AstroMath::arctangent2(param1, param2));
 }
 
-Degree Degree::operator+(const Degree& param)
+Degree Degree::operator+(const Degree& param) const
 {
 	return Degree(_value + param._value);
 }
 
-Degree Degree::operator-(const Degree& param)
+Degree Degree::operator-(const Degree& param) const
 {
 	return Degree(_value - param._value);
 }
 
-Degree Degree::operator*(const Degree& param)
+Degree Degree::operator*(const Degree& param) const
 {
 	return Degree(_value * param._value);
 }
 
-Degree Degree::operator/(const Degree& param)
+Degree Degree::operator/(const Degree& param) const
 {
 	return Degree(_value / param._value);
 }
 
-Degree Degree::operator+=(const Degree& param)
+Degree Degree::operator+=(const Degree& param) const
 {
 	return Degree(_value + param._value);
 }
 
-Degree Degree::operator-=(const Degree& param)
+Degree Degree::operator-=(const Degree& param) const
 {
 	return Degree(_value - param._value);
 }
 
-Degree Degree::operator*=(const Degree& param)
+Degree Degree::operator*=(const Degree& param) const
 {
 	return Degree(_value * param._value);
 }
 
-Degree Degree::operator/=(const Degree& param)
+Degree Degree::operator/=(const Degree& param) const
 {
 	return Degree(_value / param._value);
 }
 
-bool Degree::operator<=(const Degree& param)
+bool Degree::operator<=(const Degree& param) const
 {
 	return (_value <= param._value);
 }
 
-bool Degree::operator>=(const Degree& param)
+bool Degree::operator>=(const Degree& param) const
 {
 	return (_value >= param._value);
 }
 
-bool Degree::operator==(const Degree& param)
+bool Degree::operator==(const Degree& param) const
 {
 	return (_value == param._value);
+}
+
+bool Degree::operator<(const Degree& param) const
+{
+	return (_value < param._value);
+}
+
+bool Degree::operator>(const Degree& param) const
+{
+	return (_value > param._value);
+}
+
+bool Degree::operator!=(const Degree& param) const
+{
+	return (_value != param._value);
 }
 
 void Degree::updateDMS()

@@ -7,7 +7,7 @@ CSOURCES=
 OBJECTS=$(CSOURCES:.c=.o) $(CXXSOURCES:.cpp=.o)
 
 TESTBIN=tsc_test
-TESTSOURCES=src/test/test_main.cpp src/test/TestStardate.cpp
+TESTSOURCES=src/test/test_main.cpp src/test/TestStardate.cpp src/test/TestDegree.cpp
 TESTOBJECTS=$(TESTSOURCES:.cpp=.o)
 
 # Compiler Flags:
