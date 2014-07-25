@@ -31,11 +31,13 @@
 #define STAR_H_
 
 #include <string>
+#include <vector>
 #include "sqlite3.h"
 #include "SkyObject/SkyObject.h"
 #include "Math/Units.h"
 
 using std::string;
+using std::vector;
 using tsc::SkyObject::SkyObject;
 
 namespace tsc
@@ -54,6 +56,8 @@ namespace SkyObject
 			string getGliese();
 			string getBayerFlamsteed();
 			real getAbsMag();
+
+			static vector<Star> getStarsByMag(sqlite3* db, real mag);
 			
 		protected:
 			// The HYG catalog ID for the star

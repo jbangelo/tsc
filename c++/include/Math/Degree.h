@@ -174,6 +174,7 @@ namespace Math
 			bool operator>(const Degree& param) const;
 			bool operator!=(const Degree& param) const;
 		private:
+			static const real _negligible = 0.0000000001;
 			void updateDMS();
 			void updateHMS();
 			real _value;

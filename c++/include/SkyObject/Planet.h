@@ -31,7 +31,7 @@
 #define PLANET_H_
 
 #include <vector>
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include "SkyObject/SkyObject.h"
 #include "Math/Degree.h"
 #include "Math/Units.h"

@@ -266,7 +266,7 @@ bool Degree::operator>=(const Degree& param) const
 
 bool Degree::operator==(const Degree& param) const
 {
-	return (_value == param._value);
+	return (AstroMath::absoluteValue(_value - param._value) < _negligible);
 }
 
 bool Degree::operator<(const Degree& param) const

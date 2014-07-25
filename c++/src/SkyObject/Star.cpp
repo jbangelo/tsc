@@ -30,6 +30,7 @@
 
 #include "SkyObject/Star.h"
 #include "Math/AstroMath.h"
+#include "Utils/ToString.h"
 
 using tsc::SkyObject::Star;
 using tsc::Math::AstroMath;
@@ -91,3 +92,10 @@ real Star::getAbsMag()
 	return _absM;
 }
 
+vector<Star> Star::getStarsByMag(sqlite3* db, real mag)
+{
+	const std::string sqlStatement1 = "SELECT * FROM stars WHERE Mag >= ";
+	const std::string sqlStatement2 = ";";
+
+	std::string fullStatement = sqlStatement1 + TO_STRING(mag) + sqlStatement2;
+}
