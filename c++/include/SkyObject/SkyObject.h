@@ -44,26 +44,26 @@ namespace tsc
 {
 namespace SkyObject
 {
-	class SkyObject
-	{
-		public:
-			SkyObject();
-			SkyObject(string name, real RA, real Dec, real M, real dist);
-			virtual ~SkyObject();
-			virtual string getName();
-			virtual HorizontalCoords getHorizontalCoords(LatLng location, Stardate date);
-			virtual EquatorialCoords getGeocentricEquatorialCoords();
-			virtual real getMag();
-			virtual real getDistance();
-		protected:
-			string _name;
-			EquatorialCoords _geocentricEquatorial;
+    class SkyObject
+    {
+        public:
+            SkyObject();
+            SkyObject(string name, real RA, real Dec, real M, real dist);
+            virtual ~SkyObject();
+            virtual string getName();
+            virtual HorizontalCoords getHorizontalCoords(LatLng location, Stardate date);
+            virtual EquatorialCoords getGeocentricEquatorialCoords();
+            virtual real getMag();
+            virtual real getDistance();
+        protected:
+            string _name;
+            EquatorialCoords _geocentricEquatorial;
 
-			// Apparent magnitude
-			real _M;
-			// Distance from earth in A.U.
-			real _dist;
-	};
+            // Apparent magnitude
+            real _M;
+            // Distance from earth in A.U.
+            real _dist;
+    };
 }
 }
 

@@ -36,66 +36,66 @@ using tsc::SkyObject::Star;
 using tsc::Math::AstroMath;
 
 Star::Star(integer starID, integer hip, integer hd, integer hr, string gliese, string bayer, string pName, real RA, real Dec, real dist, real absM) : 
-	SkyObject(pName, RA, Dec, 0.0f, 0.0f), 
-	_starID(starID),
-	_hip(hip),
-	_hd(hd),
-	_hr(hr),
-	_gliese(gliese),
-	_bayerFlamsteed(bayer),
-	_absM(absM)
+    SkyObject(pName, RA, Dec, 0.0f, 0.0f), 
+    _starID(starID),
+    _hip(hip),
+    _hd(hd),
+    _hr(hr),
+    _gliese(gliese),
+    _bayerFlamsteed(bayer),
+    _absM(absM)
 {
-	// Get the apparent magnitude from the absolute magnitude
-	_M = _absM - 5.0l*(1.0l - AstroMath::log10(dist));
+    // Get the apparent magnitude from the absolute magnitude
+    _M = _absM - 5.0l*(1.0l - AstroMath::log10(dist));
 
-	// Convert the dist (in parsecs) to _dist (in A.U.)
-	_dist = dist*AstroMath::ParsecToAU;
+    // Convert the dist (in parsecs) to _dist (in A.U.)
+    _dist = dist*AstroMath::ParsecToAU;
 }
 
 Star::~Star()
 {
-	
+    
 }
 
 integer Star::getStarID()
 {
-	return _starID;
+    return _starID;
 }
 
 integer Star::getHIP()
 {
-	return _hip;
+    return _hip;
 }
 
 integer Star::getHD()
 {
-	return _hd;
+    return _hd;
 }
 
 integer Star::getHR()
 {
-	return _hr;
+    return _hr;
 }
 
 string Star::getGliese()
 {
-	return _gliese;
+    return _gliese;
 }
 
 string Star::getBayerFlamsteed()
 {
-	return _bayerFlamsteed;
+    return _bayerFlamsteed;
 }
 
 real Star::getAbsMag()
 {
-	return _absM;
+    return _absM;
 }
 
 vector<Star> Star::getStarsByMag(sqlite3* db, real mag)
 {
-	const std::string sqlStatement1 = "SELECT * FROM stars WHERE Mag >= ";
-	const std::string sqlStatement2 = ";";
+    const std::string sqlStatement1 = "SELECT * FROM stars WHERE Mag >= ";
+    const std::string sqlStatement2 = ";";
 
-	std::string fullStatement = sqlStatement1 + TO_STRING(mag) + sqlStatement2;
+    std::string fullStatement = sqlStatement1 + TO_STRING(mag) + sqlStatement2;
 }

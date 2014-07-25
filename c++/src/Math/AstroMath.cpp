@@ -35,82 +35,82 @@ using tsc::Math::AstroMath;
 
 integer AstroMath::FIX(real x)
 {
-	return int(x);
+    return int(x);
 }
 
 integer AstroMath::INT(real x)
 {
-	return floor(x);
+    return floor(x);
 }
 
 real AstroMath::absoluteValue(real x)
 {
-	return fabs(x);
+    return fabs(x);
 }
 
 real AstroMath::sign(real x)
 {
-	if (x == 0)
-	{
-		return 1;
-	}
-	else
-	{
-		return (x/absoluteValue(x));
-	}
+    if (x == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return (x/absoluteValue(x));
+    }
 }
 
 real AstroMath::sine(real x)
 {
-	return sin(x);
+    return sin(x);
 }
 
 real AstroMath::cosine(real x)
 {
-	return cos(x);
+    return cos(x);
 }
 
 real AstroMath::tangent(real x)
 {
-	return tan(x);
+    return tan(x);
 }
 
 real AstroMath::arcsine(real x)
 {
-	return asin(x);
+    return asin(x);
 }
 
 real AstroMath::arccosine(real x)
 {
-	return acos(x);
+    return acos(x);
 }
 
 real AstroMath::arctangent(real x)
 {
-	return atan(x);
+    return atan(x);
 }
 
 real AstroMath::arctangent2(real x, real y)
 {
-	return atan2(x,y);
+    return atan2(x,y);
 }
 
 real AstroMath::squareRoot(real x)
 {
-	return sqrt(x);
+    return sqrt(x);
 }
 
 real AstroMath::log10(real x)
 {
-	return log10(x);
+    return log10(x);
 }
 
 real AstroMath::power(real base, real power)
 {
-	if (power == 0.0)
-	{
-		return 1.0;
-	}
-	return pow(base,power);
+    if (power == 0.0)
+    {
+        return 1.0;
+    }
+    return pow(base,power);
 }
 

@@ -37,158 +37,158 @@ namespace tsc
 {
 namespace Math
 {
-	/**
-	 * A representation of a degree value in floating point representation
-	 */
-	class Degree
-	{
-		public:
-			/**
-			 * Creates a Degree object from a raw degree value
-			 */
-			Degree(real value);
+    /**
+     * A representation of a degree value in floating point representation
+     */
+    class Degree
+    {
+        public:
+            /**
+             * Creates a Degree object from a raw degree value
+             */
+            Degree(real value);
 
-			/**
-			 * Creates a Degree object with the default value of 0.0
-			 */
-			Degree();
+            /**
+             * Creates a Degree object with the default value of 0.0
+             */
+            Degree();
 
-			/**
-			 * Destroys a Degree object
-			 */
-			~Degree();
+            /**
+             * Destroys a Degree object
+             */
+            ~Degree();
 
-			/**
-			 * Creates a Degree object from a raw radian value
-			 */
-			static Degree fromRad(real value);
+            /**
+             * Creates a Degree object from a raw radian value
+             */
+            static Degree fromRad(real value);
 
-			/**
-			 * Creates a Degree object from raw degree arcminute and arcsecond values
-			 */
-			static Degree fromDMS(real deg, real arcminute, real arcsecond);
+            /**
+             * Creates a Degree object from raw degree arcminute and arcsecond values
+             */
+            static Degree fromDMS(real deg, real arcminute, real arcsecond);
 
-			/**
-			 * Creates a Degree object from raw hour minute and second values
-			 */
-			static Degree fromHMS(real hour, real minute, real second);
+            /**
+             * Creates a Degree object from raw hour minute and second values
+             */
+            static Degree fromHMS(real hour, real minute, real second);
 
-			/**
-			 * Retrieves the raw floating point value of the Degree object
-			 */
-			real deg();
+            /**
+             * Retrieves the raw floating point value of the Degree object
+             */
+            real deg();
 
-			/**
-			 * Retreives the raw floating point value of the Degree object converted into radians
-			 */
-			real rad();
+            /**
+             * Retreives the raw floating point value of the Degree object converted into radians
+             */
+            real rad();
 
-			/**
-			 * Changes the value of the Degree object to be the absolute value of itself
-			 */
-			void abs();
+            /**
+             * Changes the value of the Degree object to be the absolute value of itself
+             */
+            void abs();
 
-			/**
-			 * Retreives the arcMinute value of the Degree object
-			 */
-			integer arcMinute();
+            /**
+             * Retreives the arcMinute value of the Degree object
+             */
+            integer arcMinute();
 
-			/**
-			 * Retrieves the arcSecond value of the Degree object
-			 */
-			real arcSecond();
+            /**
+             * Retrieves the arcSecond value of the Degree object
+             */
+            real arcSecond();
 
-			/**
-			 * Retreives the hour value of the Degree object
-			 */
-			integer hour();
+            /**
+             * Retreives the hour value of the Degree object
+             */
+            integer hour();
 
-			/**
-			 * Retrieves the minute value of the Degree object
-			 */
-			integer minute();
+            /**
+             * Retrieves the minute value of the Degree object
+             */
+            integer minute();
 
-			/**
-			 * Retreives the second value of the Degree object
-			 */
-			real second();
+            /**
+             * Retreives the second value of the Degree object
+             */
+            real second();
 
-			/**
-			 * Gets the string representation of the Degree object
-			 */
-			std::string degStr();
+            /**
+             * Gets the string representation of the Degree object
+             */
+            std::string degStr();
 
-			/**
-			 * Gets the string representation of the degree and minute values of the Degree object
-			 */
-			std::string dmStr();
+            /**
+             * Gets the string representation of the degree and minute values of the Degree object
+             */
+            std::string dmStr();
 
-			/**
-			 * Gets the string representation of the degree, minute, and secon values of the Degree object
-			 */
-			std::string dmsStr();
+            /**
+             * Gets the string representation of the degree, minute, and secon values of the Degree object
+             */
+            std::string dmsStr();
 
-			/**
-			 * Gets the string representation of the hour value of the Degree object
-			 */
-			std::string hourStr();
+            /**
+             * Gets the string representation of the hour value of the Degree object
+             */
+            std::string hourStr();
 
-			/**
-			 * Gets the string representation of the hour and minute values of the Degree object
-			 */
-			std::string hmStr();
+            /**
+             * Gets the string representation of the hour and minute values of the Degree object
+             */
+            std::string hmStr();
 
-			/**
-			 * Gets the string representation of the hour, minute, and second values of the Degree object
-			 */
-			std::string hmsStr();
+            /**
+             * Gets the string representation of the hour, minute, and second values of the Degree object
+             */
+            std::string hmsStr();
 
-			/**
-			 * Rounds the value of the Degree object such that 0.0 <= value < 360.0
-			 */
-			void normalize();
-			/**
-			 * Rounds the value of the Degree object such that -90 <= value <= +90
-			 */
-			void normalizeLatitude();
+            /**
+             * Rounds the value of the Degree object such that 0.0 <= value < 360.0
+             */
+            void normalize();
+            /**
+             * Rounds the value of the Degree object such that -90 <= value <= +90
+             */
+            void normalizeLatitude();
 
-			static real sin(Degree& param);
-			static real cos(Degree& param);
-			static real tan(Degree& param);
-			static Degree asin(real param);
-			static Degree acos(real param);
-			static Degree atan(real param);
-			static Degree atan2(real param1, real param2);
-			Degree operator+(const Degree& param) const;
-			Degree operator-(const Degree& param) const;
-			Degree operator*(const Degree& param) const;
-			Degree operator/(const Degree& param) const;
-			Degree operator+=(const Degree& param) const;
-			Degree operator-=(const Degree& param) const;
-			Degree operator*=(const Degree& param) const;
-			Degree operator/=(const Degree& param) const;
-			bool operator<=(const Degree& param) const;
-			bool operator>=(const Degree& param) const;
-			bool operator==(const Degree& param) const;
-			bool operator<(const Degree& param) const;
-			bool operator>(const Degree& param) const;
-			bool operator!=(const Degree& param) const;
-		private:
-			static const real _negligible = 0.0000000001;
-			void updateDMS();
-			void updateHMS();
-			real _value;
+            static real sin(Degree& param);
+            static real cos(Degree& param);
+            static real tan(Degree& param);
+            static Degree asin(real param);
+            static Degree acos(real param);
+            static Degree atan(real param);
+            static Degree atan2(real param1, real param2);
+            Degree operator+(const Degree& param) const;
+            Degree operator-(const Degree& param) const;
+            Degree operator*(const Degree& param) const;
+            Degree operator/(const Degree& param) const;
+            Degree operator+=(const Degree& param) const;
+            Degree operator-=(const Degree& param) const;
+            Degree operator*=(const Degree& param) const;
+            Degree operator/=(const Degree& param) const;
+            bool operator<=(const Degree& param) const;
+            bool operator>=(const Degree& param) const;
+            bool operator==(const Degree& param) const;
+            bool operator<(const Degree& param) const;
+            bool operator>(const Degree& param) const;
+            bool operator!=(const Degree& param) const;
+        private:
+            static const real _negligible = 0.0000000001;
+            void updateDMS();
+            void updateHMS();
+            real _value;
 
-			integer _degree;
-			real _arcFraction;
-			integer _arcMinute;
-			real _arcSecond;
+            integer _degree;
+            real _arcFraction;
+            integer _arcMinute;
+            real _arcSecond;
 
-			integer _hour;
-			real _fraction;
-			integer _minute;
-			real _second;
-	};
+            integer _hour;
+            real _fraction;
+            integer _minute;
+            real _second;
+    };
 }
 }
 

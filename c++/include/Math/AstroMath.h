@@ -37,27 +37,27 @@ namespace tsc
 {
 namespace Math
 {
-	class AstroMath
-	{
-		public:
-			static const real pi = 3.14159265358979323846264338327950288419716939937510582L;
-			static const real ParsecToAU = 206264.806248L;
+    class AstroMath
+    {
+        public:
+            static const real pi = 3.14159265358979323846264338327950288419716939937510582L;
+            static const real ParsecToAU = 206264.806248L;
 
-			static integer FIX(real x);
-			static integer INT(real x);
-			static real absoluteValue(real x);
-			static real sign(real x);
-			static real sine(real x);
-			static real cosine(real x);
-			static real tangent(real x);
-			static real arcsine(real x);
-			static real arccosine(real x);
-			static real arctangent(real x);
-			static real arctangent2(real x, real y);
-			static real squareRoot(real x);
-			static real log10(real x);
-			static real power(real base, real power);
-	};
+            static integer FIX(real x);
+            static integer INT(real x);
+            static real absoluteValue(real x);
+            static real sign(real x);
+            static real sine(real x);
+            static real cosine(real x);
+            static real tangent(real x);
+            static real arcsine(real x);
+            static real arccosine(real x);
+            static real arctangent(real x);
+            static real arctangent2(real x, real y);
+            static real squareRoot(real x);
+            static real log10(real x);
+            static real power(real base, real power);
+    };
 }
 }
 
