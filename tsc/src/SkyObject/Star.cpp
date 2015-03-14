@@ -35,26 +35,27 @@
 using tsc::SkyObject::Star;
 using tsc::Math::AstroMath;
 
-Star::Star(integer starID, integer hip, integer hd, integer hr, string gliese, string bayer, string pName, real RA, real Dec, real dist, real absM) : 
-    SkyObject(pName, RA, Dec, 0.0f, 0.0f), 
-    _starID(starID),
-    _hip(hip),
-    _hd(hd),
-    _hr(hr),
-    _gliese(gliese),
-    _bayerFlamsteed(bayer),
-    _absM(absM)
+Star::Star(integer starID, integer hip, integer hd, integer hr, string gliese,
+           string bayer, string pName, real RA, real Dec, real dist, real absM)
+        : SkyObject(pName, RA, Dec, 0.0f, 0.0f),
+          _starID(starID),
+          _hip(hip),
+          _hd(hd),
+          _hr(hr),
+          _gliese(gliese),
+          _bayerFlamsteed(bayer),
+          _absM(absM)
 {
     // Get the apparent magnitude from the absolute magnitude
-    _M = _absM - 5.0l*(1.0l - AstroMath::log10(dist));
+    _M = _absM - 5.0l * (1.0l - AstroMath::log10(dist));
 
     // Convert the dist (in parsecs) to _dist (in A.U.)
-    _dist = dist*AstroMath::ParsecToAU;
+    _dist = dist * AstroMath::ParsecToAU;
 }
 
 Star::~Star()
 {
-    
+
 }
 
 integer Star::getStarID()

@@ -36,22 +36,22 @@
 using tsc::SkyObject::Planet;
 using tsc::Math::AstroMath;
 
-Planet::Planet(PlanetCode pid, sqlite3* db, Planet* earth) : 
-    SkyObject(),
-    _pid(pid),
-    _db(db),
-    _heliocentricEcliptic(),
-    _geocentricCartesian(),
-    _geocentricEcliptic(),
-    _i(0.0),
-    _k(0.0),
-    _dt(0.0),
-    _heliocentricEclipticDelay(),
-    _geocentricCartesianDelay(),
-    _geocentricEclipticDelay(),
-    _LTerms(),
-    _BTerms(),
-    _RTerms()
+Planet::Planet(PlanetCode pid, sqlite3* db, Planet* earth)
+        : SkyObject(),
+          _pid(pid),
+          _db(db),
+          _heliocentricEcliptic(),
+          _geocentricCartesian(),
+          _geocentricEcliptic(),
+          _i(0.0),
+          _k(0.0),
+          _dt(0.0),
+          _heliocentricEclipticDelay(),
+          _geocentricCartesianDelay(),
+          _geocentricEclipticDelay(),
+          _LTerms(),
+          _BTerms(),
+          _RTerms()
 {
     if (pid == EARTH)
     {
@@ -61,7 +61,7 @@ Planet::Planet(PlanetCode pid, sqlite3* db, Planet* earth) :
     {
         _earth = earth;
     }
-    
+
     loadData();
 }
 
@@ -75,9 +75,12 @@ void Planet::calculatePosition(Stardate date)
     real millenia = date.J2000m();
 
     _heliocentricEcliptic = calculateHeliocentricEclipticCoords(millenia);
-    _geocentricCartesian = calculateGeocentricCartesianCoords(_heliocentricEcliptic);
-    _geocentricEcliptic = calculateGeocentricEclipticCoords(_geocentricCartesian);
-    _geocentricEquatorial = calculateGeocentricEquatorialCoords(_geocentricEcliptic);
+    _geocentricCartesian = calculateGeocentricCartesianCoords(
+            _heliocentricEcliptic);
+    _geocentricEcliptic = calculateGeocentricEclipticCoords(
+            _geocentricCartesian);
+    _geocentricEquatorial = calculateGeocentricEquatorialCoords(
+            _geocentricEcliptic);
     calculateLightDelay(date);
     calculateIlluminatedFraction();
     calcMag();
@@ -127,10 +130,10 @@ real Planet::sumTerms(vector<vector<OrbitalTerm>*> terms, real millenia)
             real A = terms[i]->at(j).A;
             real B = terms[i]->at(j).B;
             real C = terms[i]->at(j).C;
-            subTerm += A*AstroMath::cosine(B + C*millenia);
+            subTerm += A * AstroMath::cosine(B + C * millenia);
         }
         //std::cout << subTerm << std::endl;
-        total += subTerm*AstroMath::power(millenia, static_cast<real>(i));
+        total += subTerm * AstroMath::power(millenia, static_cast<real>(i));
     }
 
     return total;
@@ -149,40 +152,60 @@ EclipticCoords Planet::calculateHeliocentricEclipticCoords(real millenia)
     return newCoords;
 }
 
-CartesianCoords Planet::calculateGeocentricCartesianCoords(EclipticCoords heliocentricCoords)
+CartesianCoords Planet::calculateGeocentricCartesianCoords(
+        EclipticCoords heliocentricCoords)
 {
     EclipticCoords earthCoords(0.0, 0.0, 0.0);
     CartesianCoords newCoords;
 
-     if (_earth != NULL)
+    if (_earth != NULL)
     {
         earthCoords = _earth->getGeocentricEclipticCoords();
     }
 
-    newCoords.x = _heliocentricEcliptic.delta*Degree::cos(_heliocentricEcliptic.beta)*Degree::cos(_heliocentricEcliptic.lambda) - earthCoords.delta*Degree::cos(earthCoords.beta)*Degree::cos(earthCoords.lambda);
+    newCoords.x = _heliocentricEcliptic.delta
+            * Degree::cos(_heliocentricEcliptic.beta)
+            * Degree::cos(_heliocentricEcliptic.lambda)
+            - earthCoords.delta * Degree::cos(earthCoords.beta)
+                    * Degree::cos(earthCoords.lambda);
 
-    newCoords.y = _heliocentricEcliptic.delta*Degree::cos(_heliocentricEcliptic.beta)*Degree::sin(_heliocentricEcliptic.lambda) - earthCoords.delta*Degree::cos(earthCoords.beta)*Degree::sin(earthCoords.lambda);
+    newCoords.y = _heliocentricEcliptic.delta
+            * Degree::cos(_heliocentricEcliptic.beta)
+            * Degree::sin(_heliocentricEcliptic.lambda)
+            - earthCoords.delta * Degree::cos(earthCoords.beta)
+                    * Degree::sin(earthCoords.lambda);
 
-    newCoords.z = _heliocentricEcliptic.delta*Degree::sin(_heliocentricEcliptic.beta) - earthCoords.delta*Degree::sin(earthCoords.beta);
+    newCoords.z = _heliocentricEcliptic.delta
+            * Degree::sin(_heliocentricEcliptic.beta)
+            - earthCoords.delta * Degree::sin(earthCoords.beta);
 
     return newCoords;
 }
 
-EclipticCoords Planet::calculateGeocentricEclipticCoords(CartesianCoords geocentricCoords)
+EclipticCoords Planet::calculateGeocentricEclipticCoords(
+        CartesianCoords geocentricCoords)
 {
     EclipticCoords newCoords;
 
     newCoords.lambda = Degree::atan2(geocentricCoords.y, geocentricCoords.x);
     newCoords.lambda.normalize();
 
-    newCoords.beta = Degree::atan2(geocentricCoords.z, AstroMath::squareRoot(geocentricCoords.x*geocentricCoords.x + geocentricCoords.y*geocentricCoords.y));
+    newCoords.beta = Degree::atan2(
+            geocentricCoords.z,
+            AstroMath::squareRoot(
+                    geocentricCoords.x * geocentricCoords.x
+                            + geocentricCoords.y * geocentricCoords.y));
 
-    newCoords.delta = AstroMath::squareRoot(geocentricCoords.x*geocentricCoords.x + geocentricCoords.y*geocentricCoords.y + geocentricCoords.z*geocentricCoords.z);
+    newCoords.delta = AstroMath::squareRoot(
+            geocentricCoords.x * geocentricCoords.x
+                    + geocentricCoords.y * geocentricCoords.y
+                    + geocentricCoords.z * geocentricCoords.z);
 
     return newCoords;
 }
 
-EquatorialCoords Planet::calculateGeocentricEquatorialCoords(EclipticCoords geocentricCoords)
+EquatorialCoords Planet::calculateGeocentricEquatorialCoords(
+        EclipticCoords geocentricCoords)
 {
     Degree ec(23.4392911);
     Degree l, b;
@@ -191,10 +214,14 @@ EquatorialCoords Planet::calculateGeocentricEquatorialCoords(EclipticCoords geoc
     l = geocentricCoords.lambda;
     b = geocentricCoords.beta;
 
-    newCoords.ra = Degree::atan2(Degree::sin(l)*Degree::cos(ec) - Degree::tan(b)*Degree::sin(ec), Degree::cos(l));
+    newCoords.ra = Degree::atan2(
+            Degree::sin(l) * Degree::cos(ec) - Degree::tan(b) * Degree::sin(ec),
+            Degree::cos(l));
     newCoords.ra.normalize();
 
-    newCoords.dec = Degree::asin(Degree::sin(b)*Degree::cos(ec) + Degree::cos(b)*Degree::sin(ec)*Degree::sin(l));
+    newCoords.dec = Degree::asin(
+            Degree::sin(b) * Degree::cos(ec)
+                    + Degree::cos(b) * Degree::sin(ec) * Degree::sin(l));
 
     return newCoords;
 }
@@ -205,7 +232,7 @@ void Planet::calculateLightDelay(Stardate date)
     //EclipticCoords earthHeliocenticCoords = _earth->getHeliocentricEclipticCoords();
     CartesianCoords geocentricCartesianDelay;
     EclipticCoords geocentricEclipticDelay;
-    
+
     real dt = 0.0, dtPrev = 1.0;
 
     while (dt != dtPrev)
@@ -214,9 +241,11 @@ void Planet::calculateLightDelay(Stardate date)
         real t = date.J2000m(dt);
 
         heliocentricCoordsDelay = calculateHeliocentricEclipticCoords(t);
-        geocentricCartesianDelay = calculateGeocentricCartesianCoords(heliocentricCoordsDelay);
-        geocentricEclipticDelay = calculateGeocentricEclipticCoords(geocentricCartesianDelay);
-        dt = 0.0057755*geocentricEclipticDelay.delta;
+        geocentricCartesianDelay = calculateGeocentricCartesianCoords(
+                heliocentricCoordsDelay);
+        geocentricEclipticDelay = calculateGeocentricEclipticCoords(
+                geocentricCartesianDelay);
+        dt = 0.0057755 * geocentricEclipticDelay.delta;
     }
 
     _dt = dt;
@@ -234,9 +263,14 @@ void Planet::calculateIlluminatedFraction()
         earthCoords = _earth->getHeliocentricEclipticCoords();
     }
 
-    _i = Degree::acos((AstroMath::power(_heliocentricEcliptic.delta,2) + AstroMath::power(_geocentricEcliptic.delta,2) - AstroMath::power(earthCoords.delta,2))/(2*_heliocentricEcliptic.delta*_geocentricEcliptic.delta));
+    _i = Degree::acos(
+            (AstroMath::power(_heliocentricEcliptic.delta, 2)
+                    + AstroMath::power(_geocentricEcliptic.delta, 2)
+                    - AstroMath::power(earthCoords.delta, 2))
+                    / (2 * _heliocentricEcliptic.delta
+                            * _geocentricEcliptic.delta));
 
-    _k = (1 + Degree::cos(_i))/2;
+    _k = (1 + Degree::cos(_i)) / 2;
 }
 
 void Planet::calcMag()
@@ -247,7 +281,8 @@ void Planet::calcMag()
 bool Planet::loadData()
 {
     sqlite3_stmt *preparedStatement;
-    const std::string sqlStatement1("SELECT rank,A,B,C FROM planets WHERE tid=");
+    const std::string sqlStatement1(
+            "SELECT rank,A,B,C FROM planets WHERE tid=");
     const std::string sqlStatement2(" ORDER BY rank DESC;");
 
     for (int lbr = 0; lbr < 3; lbr++)
@@ -255,11 +290,14 @@ bool Planet::loadData()
         int order = 0;
         do
         {
-            int tid = 4000 + static_cast<int>(_pid) + ((lbr+1)*10) + order;
-            std::string sqlStatement = sqlStatement1 + TO_STRING(tid) + sqlStatement2;
+            int tid = 4000 + static_cast<int>(_pid) + ((lbr + 1) * 10) + order;
+            std::string sqlStatement = sqlStatement1 + TO_STRING(tid)
+                    + sqlStatement2;
             int returnCode;
 
-            if (sqlite3_prepare_v2(_db, sqlStatement.c_str(), sqlStatement.length(), &preparedStatement, NULL) != SQLITE_OK)
+            if (sqlite3_prepare_v2(_db, sqlStatement.c_str(),
+                                   sqlStatement.length(), &preparedStatement,
+                                   NULL) != SQLITE_OK)
             {
                 return false;
             }
@@ -284,13 +322,13 @@ bool Planet::loadData()
                     orderNTerms->resize(rank);
                 }
 
-                orderNTerms->at(rank-1) = term;
+                orderNTerms->at(rank - 1) = term;
                 returnCode = sqlite3_step(preparedStatement);
             }
 
             //std::cout << "Order " << order << " terms are " << orderNTerms->size() << " elements long." << std::endl;
 
-            switch(lbr)
+            switch (lbr)
             {
                 case 0:
                     _LTerms.push_back(orderNTerms);
@@ -311,7 +349,8 @@ bool Planet::loadData()
             }
             else
             {
-                std::cerr << "Error accessing database: " << /*sqlite3_errstr(returnCode) <<*/ std::endl;
+                std::cerr << "Error accessing database: "
+                          << /*sqlite3_errstr(returnCode) <<*/std::endl;
                 return false;
             }
         } while (order < 6);

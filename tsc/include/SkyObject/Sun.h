@@ -38,20 +38,21 @@ namespace tsc
 {
 namespace SkyObject
 {
-    class Sun : public Planet
-    {
-        public:
-            Sun(sqlite3* db, Planet* earth);
-            ~Sun();
-            virtual void calculatePosition(Stardate date);
-            
-        protected:
-            virtual EclipticCoords calculateHeliocentricEclipticCoords();
-            virtual CartesianCoords calculateGeocentricCartesianCoords(EclipticCoords geocentricCoords, Degree meanObliquity);
-            virtual EclipticCoords calculateGeocentricEclipticCoords();
-            virtual void calculateLightDelay(Stardate date);
-            virtual void calculateIlluminatedFraction();
-    };
+class Sun : public Planet
+{
+ public:
+    Sun(sqlite3* db, Planet* earth);
+    ~Sun();
+    virtual void calculatePosition(Stardate date);
+
+ protected:
+    virtual EclipticCoords calculateHeliocentricEclipticCoords();
+    virtual CartesianCoords calculateGeocentricCartesianCoords(
+            EclipticCoords geocentricCoords, Degree meanObliquity);
+    virtual EclipticCoords calculateGeocentricEclipticCoords();
+    virtual void calculateLightDelay(Stardate date);
+    virtual void calculateIlluminatedFraction();
+};
 }
 }
 

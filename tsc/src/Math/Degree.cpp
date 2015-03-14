@@ -35,15 +35,15 @@
 using tsc::Math::Degree;
 using tsc::Math::AstroMath;
 
-Degree::Degree(real value) : 
-    _value(value)
+Degree::Degree(real value)
+        : _value(value)
 {
     updateDMS();
     updateHMS();
 }
 
-Degree::Degree() :
-    _value(0.0)
+Degree::Degree()
+        : _value(0.0)
 {
     updateHMS();
     updateDMS();
@@ -56,17 +56,21 @@ Degree::~Degree()
 
 Degree Degree::fromRad(real value)
 {
-    return Degree(value*(180.0/AstroMath::pi));
+    return Degree(value * (180.0 / AstroMath::pi));
 }
 
 Degree Degree::fromDMS(real deg, real arcminute, real arcsecond)
 {
-    return Degree(deg+(AstroMath::sign(deg)*arcminute/60.0)+(AstroMath::sign(deg)*arcsecond/3600.0));
+    return Degree(
+            deg + (AstroMath::sign(deg) * arcminute / 60.0)
+                    + (AstroMath::sign(deg) * arcsecond / 3600.0));
 }
 
 Degree Degree::fromHMS(real hour, real minute, real second)
 {
-    return Degree((hour+(AstroMath::sign(hour)*minute/60.0)+(AstroMath::sign(hour)*second/3600.0))*15.0);
+    return Degree(
+            (hour + (AstroMath::sign(hour) * minute / 60.0)
+                    + (AstroMath::sign(hour) * second / 3600.0)) * 15.0);
 }
 
 real Degree::deg()
@@ -76,7 +80,7 @@ real Degree::deg()
 
 real Degree::rad()
 {
-    return _value*(AstroMath::pi/180.0);
+    return _value * (AstroMath::pi / 180.0);
 }
 
 void Degree::abs()
@@ -119,7 +123,7 @@ std::string Degree::degStr()
 std::string Degree::dmStr()
 {
     std::ostringstream oss;
-    oss << _degree << "°" << _arcMinute+(_arcSecond/60.0) << "'";
+    oss << _degree << "°" << _arcMinute + (_arcSecond / 60.0) << "'";
     return oss.str();
 }
 
@@ -133,14 +137,14 @@ std::string Degree::dmsStr()
 std::string Degree::hourStr()
 {
     std::ostringstream oss;
-    oss << _hour + (_minute + (_second/60.0)/60.0) << "h";
+    oss << _hour + (_minute + (_second / 60.0) / 60.0) << "h";
     return oss.str();
 }
 
 std::string Degree::hmStr()
 {
     std::ostringstream oss;
-    oss << _hour << "h" << _minute + (_second/60.0) << "m";
+    oss << _hour << "h" << _minute + (_second / 60.0) << "m";
     return oss.str();
 }
 
@@ -155,11 +159,11 @@ void Degree::normalize()
 {
     if (_value < 0.0L)
     {
-        _value += (360.0L * (AstroMath::INT(_value/-360.0L)+1));
+        _value += (360.0L * (AstroMath::INT(_value / -360.0L) + 1));
     }
     else if (_value >= 360.0L)
     {
-        _value -= (360.0L * AstroMath::INT(_value/360.0));
+        _value -= (360.0L * AstroMath::INT(_value / 360.0));
     }
     updateHMS();
     updateDMS();
@@ -169,11 +173,11 @@ void Degree::normalizeLatitude()
 {
     if (_value < -90.0L)
     {
-        _value += (180.0L * (AstroMath::INT(_value/-180.0L)+1));
+        _value += (180.0L * (AstroMath::INT(_value / -180.0L) + 1));
     }
     else if (_value > 90.0L)
     {
-        _value -= (180.0L * AstroMath::INT(_value/180.0));
+        _value -= (180.0L * AstroMath::INT(_value / 180.0));
     }
     updateHMS();
     updateDMS();
@@ -288,14 +292,14 @@ void Degree::updateDMS()
 {
     _degree = int(_value);
     _arcFraction = AstroMath::absoluteValue(_value - _degree);
-    _arcMinute = int(_arcFraction*60.0);
-    _arcSecond = (_arcFraction*60.0 - _arcMinute)*60.0;
+    _arcMinute = int(_arcFraction * 60.0);
+    _arcSecond = (_arcFraction * 60.0 - _arcMinute) * 60.0;
 }
 
 void Degree::updateHMS()
 {
-    _hour = int(_value/15.0);
-    _fraction = AstroMath::absoluteValue((_value/15.0) - _hour);
-    _minute = int(_fraction*60.0);
-    _second = (_fraction*60.0 - _minute)*60.0;
+    _hour = int(_value / 15.0);
+    _fraction = AstroMath::absoluteValue((_value / 15.0) - _hour);
+    _minute = int(_fraction * 60.0);
+    _second = (_fraction * 60.0 - _minute) * 60.0;
 }

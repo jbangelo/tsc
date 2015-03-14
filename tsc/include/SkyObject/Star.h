@@ -44,36 +44,37 @@ namespace tsc
 {
 namespace SkyObject
 {
-    class Star : public SkyObject
-    {
-        public:
-            Star(integer starID, integer hip, integer hd, integer hr, string gliese, string bayer, string pName, real RA, real Dec, real dist, real absM);
-            ~Star();
-            integer getStarID();
-            integer getHIP();
-            integer getHD();
-            integer getHR();
-            string getGliese();
-            string getBayerFlamsteed();
-            real getAbsMag();
+class Star : public SkyObject
+{
+ public:
+    Star(integer starID, integer hip, integer hd, integer hr, string gliese,
+         string bayer, string pName, real RA, real Dec, real dist, real absM);
+    ~Star();
+    integer getStarID();
+    integer getHIP();
+    integer getHD();
+    integer getHR();
+    string getGliese();
+    string getBayerFlamsteed();
+    real getAbsMag();
 
-            static vector<Star> getStarsByMag(sqlite3* db, real mag);
-            
-        protected:
-            // The HYG catalog ID for the star
-            integer _starID;
-            integer _hip;
-            // The Henry Draper catalog ID, or -1 if not know
-            integer _hd;
-            // The Harvard Revised catalog ID, or -1 if not know
-            integer _hr;
-            // The Gliese catalog Third Edition's ID
-            string _gliese;
-            // The Bayer/Flamsteed designation
-            string _bayerFlamsteed;
-            // The Absolute magnitude
-            real _absM;
-    };
+    static vector<Star> getStarsByMag(sqlite3* db, real mag);
+
+ protected:
+    // The HYG catalog ID for the star
+    integer _starID;
+    integer _hip;
+    // The Henry Draper catalog ID, or -1 if not know
+    integer _hd;
+    // The Harvard Revised catalog ID, or -1 if not know
+    integer _hr;
+    // The Gliese catalog Third Edition's ID
+    string _gliese;
+    // The Bayer/Flamsteed designation
+    string _bayerFlamsteed;
+    // The Absolute magnitude
+    real _absM;
+};
 }
 }
 

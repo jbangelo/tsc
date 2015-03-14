@@ -56,7 +56,7 @@ real AstroMath::sign(real x)
     }
     else
     {
-        return (x/absoluteValue(x));
+        return (x / absoluteValue(x));
     }
 }
 
@@ -92,7 +92,7 @@ real AstroMath::arctangent(real x)
 
 real AstroMath::arctangent2(real x, real y)
 {
-    return atan2(x,y);
+    return atan2(x, y);
 }
 
 real AstroMath::squareRoot(real x)
@@ -111,6 +111,6 @@ real AstroMath::power(real base, real power)
     {
         return 1.0;
     }
-    return pow(base,power);
+    return pow(base, power);
 }
 

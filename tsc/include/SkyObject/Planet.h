@@ -48,73 +48,76 @@ namespace tsc
 {
 namespace SkyObject
 {
-    class Planet : public SkyObject
+class Planet : public SkyObject
+{
+ public:
+    enum PlanetCode
     {
-        public:
-            enum PlanetCode
-            {
-                SUN = -100,
-                MERCURY = 100,
-                VENUS = 200,
-                EARTH = 300,
-                MARS = 400,
-                JUPITER = 500,
-                SATURN = 600,
-                URANUS = 700,
-                NEPTUNE = 800,
-            };
-
-            Planet(PlanetCode pid, sqlite3* db, Planet* earth);
-            ~Planet();
-            virtual void calculatePosition(Stardate date);
-            virtual EclipticCoords getHeliocentricEclipticCoords();
-            virtual EclipticCoords getGeocentricEclipticCoords();
-            virtual CartesianCoords getGeocentricCartesianCoords();
-            virtual real getLightDelay();
-            virtual real getIlluminatedFraction();
-            virtual Degree getPhaseAngle();
-            
-        protected:
-            virtual bool loadData();
-            static real sumTerms(vector<vector<OrbitalTerm>*> terms, real millenia);
-            virtual EclipticCoords calculateHeliocentricEclipticCoords(real millenia);
-            virtual CartesianCoords calculateGeocentricCartesianCoords(EclipticCoords heliocentricCoords);
-            virtual EclipticCoords calculateGeocentricEclipticCoords(CartesianCoords geocentricCoords);
-            virtual EquatorialCoords calculateGeocentricEquatorialCoords(EclipticCoords geocentricCoords);
-            virtual void calculateLightDelay(Stardate date);
-            virtual void calculateIlluminatedFraction();
-            virtual void calcMag();
-
-            PlanetCode _pid;
-            sqlite3* _db;
-            Planet* _earth;
-            
-            // Heliocentric Coordinates
-            EclipticCoords _heliocentricEcliptic;
-
-            // Geocentric Coordinates
-            CartesianCoords _geocentricCartesian;
-            EclipticCoords _geocentricEcliptic;
-
-            // Phase angle to earth
-            Degree _i;
-
-            // Illuminated portion (in %)
-            real _k;
-
-            // Light-time delay (in days)
-            real _dt;
-
-            // Light-time delay adjusted variables
-            
-            EclipticCoords _heliocentricEclipticDelay;
-            CartesianCoords _geocentricCartesianDelay;
-            EclipticCoords _geocentricEclipticDelay;
-
-            vector<vector<OrbitalTerm>*> _LTerms;
-            vector<vector<OrbitalTerm>*> _BTerms;
-            vector<vector<OrbitalTerm>*> _RTerms;
+        SUN = -100,
+        MERCURY = 100,
+        VENUS = 200,
+        EARTH = 300,
+        MARS = 400,
+        JUPITER = 500,
+        SATURN = 600,
+        URANUS = 700,
+        NEPTUNE = 800,
     };
+
+    Planet(PlanetCode pid, sqlite3* db, Planet* earth);
+    ~Planet();
+    virtual void calculatePosition(Stardate date);
+    virtual EclipticCoords getHeliocentricEclipticCoords();
+    virtual EclipticCoords getGeocentricEclipticCoords();
+    virtual CartesianCoords getGeocentricCartesianCoords();
+    virtual real getLightDelay();
+    virtual real getIlluminatedFraction();
+    virtual Degree getPhaseAngle();
+
+ protected:
+    virtual bool loadData();
+    static real sumTerms(vector<vector<OrbitalTerm>*> terms, real millenia);
+    virtual EclipticCoords calculateHeliocentricEclipticCoords(real millenia);
+    virtual CartesianCoords calculateGeocentricCartesianCoords(
+            EclipticCoords heliocentricCoords);
+    virtual EclipticCoords calculateGeocentricEclipticCoords(
+            CartesianCoords geocentricCoords);
+    virtual EquatorialCoords calculateGeocentricEquatorialCoords(
+            EclipticCoords geocentricCoords);
+    virtual void calculateLightDelay(Stardate date);
+    virtual void calculateIlluminatedFraction();
+    virtual void calcMag();
+
+    PlanetCode _pid;
+    sqlite3* _db;
+    Planet* _earth;
+
+    // Heliocentric Coordinates
+    EclipticCoords _heliocentricEcliptic;
+
+    // Geocentric Coordinates
+    CartesianCoords _geocentricCartesian;
+    EclipticCoords _geocentricEcliptic;
+
+    // Phase angle to earth
+    Degree _i;
+
+    // Illuminated portion (in %)
+    real _k;
+
+    // Light-time delay (in days)
+    real _dt;
+
+    // Light-time delay adjusted variables
+
+    EclipticCoords _heliocentricEclipticDelay;
+    CartesianCoords _geocentricCartesianDelay;
+    EclipticCoords _geocentricEclipticDelay;
+
+    vector<vector<OrbitalTerm>*> _LTerms;
+    vector<vector<OrbitalTerm>*> _BTerms;
+    vector<vector<OrbitalTerm>*> _RTerms;
+};
 }
 }
 

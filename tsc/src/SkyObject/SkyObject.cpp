@@ -33,20 +33,20 @@
 using tsc::SkyObject::SkyObject;
 using tsc::Math::AstroMath;
 
-SkyObject::SkyObject() : 
-    _name(""),
-    _geocentricEquatorial(0.0, 0.0),
-    _M(0.0),
-    _dist(0.0)
+SkyObject::SkyObject()
+        : _name(""),
+          _geocentricEquatorial(0.0, 0.0),
+          _M(0.0),
+          _dist(0.0)
 {
 
 }
 
-SkyObject::SkyObject(string name, real RA, real Dec, real M, real dist) : 
-    _name(name),
-    _geocentricEquatorial(RA, Dec),
-    _M(M),
-    _dist(dist)
+SkyObject::SkyObject(string name, real RA, real Dec, real M, real dist)
+        : _name(name),
+          _geocentricEquatorial(RA, Dec),
+          _M(M),
+          _dist(dist)
 {
 
 }
@@ -64,15 +64,22 @@ std::string SkyObject::getName()
 HorizontalCoords SkyObject::getHorizontalCoords(LatLng location, Stardate date)
 {
     HorizontalCoords horiz;
-    real x,y;
+    real x, y;
 
-    Degree H = date.apparentSidereal() - location.lng - _geocentricEquatorial.ra;
+    Degree H = date.apparentSidereal() - location.lng
+            - _geocentricEquatorial.ra;
     H.normalize();
-    
+
     y = Degree::sin(H);
-    x = Degree::cos(H)*Degree::sin(location.lat) - Degree::tan(_geocentricEquatorial.dec)*Degree::cos(location.lat);
+    x = Degree::cos(H) * Degree::sin(location.lat)
+            - Degree::tan(_geocentricEquatorial.dec)
+                    * Degree::cos(location.lat);
     horiz.az = Degree::atan2(y, x);
-    horiz.alt = Degree::asin(Degree::sin(location.lat)*Degree::sin(_geocentricEquatorial.dec) + Degree::cos(location.lat)*Degree::cos(_geocentricEquatorial.dec)*Degree::cos(H));
+    horiz.alt = Degree::asin(
+            Degree::sin(location.lat) * Degree::sin(_geocentricEquatorial.dec)
+                    + Degree::cos(location.lat)
+                            * Degree::cos(_geocentricEquatorial.dec)
+                            * Degree::cos(H));
 
     return horiz;
 }

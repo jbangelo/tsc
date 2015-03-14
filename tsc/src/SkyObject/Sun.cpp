@@ -35,8 +35,8 @@
 using tsc::SkyObject::Sun;
 using tsc::Math::AstroMath;
 
-Sun::Sun(sqlite3* db, Planet* earth) : 
-    Planet(SUN, db, earth)
+Sun::Sun(sqlite3* db, Planet* earth)
+        : Planet(SUN, db, earth)
 {
 
 }
@@ -50,8 +50,10 @@ void Sun::calculatePosition(Stardate date)
 {
     _heliocentricEcliptic = calculateHeliocentricEclipticCoords();
     _geocentricEcliptic = calculateGeocentricEclipticCoords();
-    _geocentricCartesian = calculateGeocentricCartesianCoords(_geocentricEcliptic, date.meanObliquity());
-    _geocentricEquatorial = calculateGeocentricEquatorialCoords(_geocentricEcliptic);
+    _geocentricCartesian = calculateGeocentricCartesianCoords(
+            _geocentricEcliptic, date.meanObliquity());
+    _geocentricEquatorial = calculateGeocentricEquatorialCoords(
+            _geocentricEcliptic);
     calculateLightDelay(date);
     calculateIlluminatedFraction();
     calcMag();
@@ -59,19 +61,31 @@ void Sun::calculatePosition(Stardate date)
 
 EclipticCoords Sun::calculateHeliocentricEclipticCoords()
 {
-    EclipticCoords newCoords(0.0,0.0,0.0);
+    EclipticCoords newCoords(0.0, 0.0, 0.0);
 
     return newCoords;
 }
 
-CartesianCoords Sun::calculateGeocentricCartesianCoords(EclipticCoords geocentricCoords, Degree meanObliquity)
+CartesianCoords Sun::calculateGeocentricCartesianCoords(
+        EclipticCoords geocentricCoords, Degree meanObliquity)
 {
     EclipticCoords earthCoords(0.0, 0.0, 0.0);
     CartesianCoords newCoords;
 
-    newCoords.x = geocentricCoords.delta*Degree::cos(geocentricCoords.beta)*Degree::cos(geocentricCoords.lambda);
-    newCoords.y = geocentricCoords.delta*(Degree::cos(geocentricCoords.beta)*Degree::sin(geocentricCoords.lambda)*Degree::cos(meanObliquity) - Degree::sin(geocentricCoords.beta)*Degree::sin(meanObliquity));
-    newCoords.z = geocentricCoords.delta*(Degree::cos(geocentricCoords.beta)*Degree::sin(geocentricCoords.lambda)*Degree::sin(meanObliquity) + Degree::sin(geocentricCoords.beta)*Degree::cos(meanObliquity));
+    newCoords.x = geocentricCoords.delta * Degree::cos(geocentricCoords.beta)
+            * Degree::cos(geocentricCoords.lambda);
+    newCoords.y = geocentricCoords.delta
+            * (Degree::cos(geocentricCoords.beta)
+                    * Degree::sin(geocentricCoords.lambda)
+                    * Degree::cos(meanObliquity)
+                    - Degree::sin(geocentricCoords.beta)
+                            * Degree::sin(meanObliquity));
+    newCoords.z = geocentricCoords.delta
+            * (Degree::cos(geocentricCoords.beta)
+                    * Degree::sin(geocentricCoords.lambda)
+                    * Degree::sin(meanObliquity)
+                    + Degree::sin(geocentricCoords.beta)
+                            * Degree::cos(meanObliquity));
 
     return newCoords;
 }
@@ -81,8 +95,8 @@ EclipticCoords Sun::calculateGeocentricEclipticCoords()
     EclipticCoords newCoords;
     EclipticCoords earthCoords = _earth->getHeliocentricEclipticCoords();
 
-    newCoords.lambda = earthCoords.lambda+Degree(180.0);
-    newCoords.beta = earthCoords.beta*-1;
+    newCoords.lambda = earthCoords.lambda + Degree(180.0);
+    newCoords.beta = earthCoords.beta * -1;
     newCoords.delta = earthCoords.delta;
 
     return newCoords;
@@ -93,7 +107,7 @@ void Sun::calculateLightDelay(Stardate date)
     EclipticCoords heliocentricCoordsDelay = _heliocentricEcliptic;
     CartesianCoords geocentricCartesianDelay;
     EclipticCoords geocentricEclipticDelay;
-    
+
     real dt = 0.0, dtPrev = 1.0;
 
     while (dt != dtPrev)
@@ -102,8 +116,9 @@ void Sun::calculateLightDelay(Stardate date)
 
         heliocentricCoordsDelay = calculateHeliocentricEclipticCoords();
         geocentricEclipticDelay = calculateGeocentricEclipticCoords();
-        geocentricCartesianDelay = calculateGeocentricCartesianCoords(heliocentricCoordsDelay, date.meanObliquity());
-        dt = 0.0057755*geocentricEclipticDelay.delta;
+        geocentricCartesianDelay = calculateGeocentricCartesianCoords(
+                heliocentricCoordsDelay, date.meanObliquity());
+        dt = 0.0057755 * geocentricEclipticDelay.delta;
     }
 
     _dt = dt;

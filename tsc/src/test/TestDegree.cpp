@@ -27,6 +27,6 @@ void TestDegree::testComparisons()
     CPPUNIT_ASSERT(d1 <= d2);
     CPPUNIT_ASSERT(d2 != d4);
     CPPUNIT_ASSERT(d1 == d3);
-    
+
 }
 

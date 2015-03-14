@@ -38,67 +38,148 @@ namespace tsc
 {
 namespace Math
 {
-    typedef struct HorizontalCoords
+typedef struct HorizontalCoords
+{
+    Degree alt;
+    Degree az;
+
+    HorizontalCoords()
+            : alt(0.0),
+              az(0.0)
     {
-        Degree alt;
-        Degree az;
-
-        HorizontalCoords() : alt(0.0), az(0.0) { };
-        HorizontalCoords(Degree _alt, Degree _az) : alt(_alt), az(_az) { };
-        HorizontalCoords(real _alt, real _az) : alt(_alt), az(_az) { };
-    } HorizontalCoords;
-
-    typedef struct EquatorialCoords
+    }
+    ;
+    HorizontalCoords(Degree _alt, Degree _az)
+            : alt(_alt),
+              az(_az)
     {
-        Degree ra;
-        Degree dec; // Dec
-
-        EquatorialCoords() : ra(0.0), dec(0.0) { };
-        EquatorialCoords(Degree _ra, Degree _dec) : ra(_ra), dec(_dec) { };
-    } EquatorialCoords;
-
-    typedef struct EclipticCoords
+    }
+    ;
+    HorizontalCoords(real _alt, real _az)
+            : alt(_alt),
+              az(_az)
     {
-        Degree lambda; // longitude
-        Degree beta; // latitude
-        real delta; // distace
+    }
+    ;
+} HorizontalCoords;
 
-        EclipticCoords() : lambda(0.0), beta(0.0), delta(0.0) { };
-        EclipticCoords(Degree _lambda, Degree _beta) : lambda(_lambda), beta(_beta), delta(0.0) { };
-        EclipticCoords(Degree _lambda, Degree _beta, real _delta) : lambda(_lambda), beta(_beta), delta(_delta) { };
-    } EclipticCoords;
+typedef struct EquatorialCoords
+{
+    Degree ra;
+    Degree dec;  // Dec
 
-    typedef struct CartesianCoords
+    EquatorialCoords()
+            : ra(0.0),
+              dec(0.0)
     {
-        real x;
-        real y;
-        real z;
-
-        CartesianCoords() : x(0.0), y(0.0), z(0.0) { };
-        CartesianCoords(real _x, real _y, real _z) : x(_x), y(_y), z(_z) { };
-    } CartesianCoords;
-
-    typedef struct LatLng
+    }
+    ;
+    EquatorialCoords(Degree _ra, Degree _dec)
+            : ra(_ra),
+              dec(_dec)
     {
-        Degree lat;
-        Degree lng;
+    }
+    ;
+} EquatorialCoords;
 
-        LatLng() : lat(0.0), lng(0.0) { };
-        LatLng(Degree _lat, Degree _lng) : lat(_lat), lng(_lng) { };
-        LatLng(real _lat, real _lng) : lat(_lat), lng(_lng) { };
-    } LatLng;
+typedef struct EclipticCoords
+{
+    Degree lambda;  // longitude
+    Degree beta;  // latitude
+    real delta;  // distace
 
-    typedef struct OrbitalTerm
+    EclipticCoords()
+            : lambda(0.0),
+              beta(0.0),
+              delta(0.0)
     {
-        real A;
-        real B;
-        real C;
+    }
+    ;
+    EclipticCoords(Degree _lambda, Degree _beta)
+            : lambda(_lambda),
+              beta(_beta),
+              delta(0.0)
+    {
+    }
+    ;
+    EclipticCoords(Degree _lambda, Degree _beta, real _delta)
+            : lambda(_lambda),
+              beta(_beta),
+              delta(_delta)
+    {
+    }
+    ;
+} EclipticCoords;
 
-        OrbitalTerm() : A(0.0), B(0.0), C(0.0) { };
-        OrbitalTerm(real _A, real _B, real _C) : A(_A), B(_B), C(_C) { };
-    } OrbitalTerm;
+typedef struct CartesianCoords
+{
+    real x;
+    real y;
+    real z;
 
-    
+    CartesianCoords()
+            : x(0.0),
+              y(0.0),
+              z(0.0)
+    {
+    }
+    ;
+    CartesianCoords(real _x, real _y, real _z)
+            : x(_x),
+              y(_y),
+              z(_z)
+    {
+    }
+    ;
+} CartesianCoords;
+
+typedef struct LatLng
+{
+    Degree lat;
+    Degree lng;
+
+    LatLng()
+            : lat(0.0),
+              lng(0.0)
+    {
+    }
+    ;
+    LatLng(Degree _lat, Degree _lng)
+            : lat(_lat),
+              lng(_lng)
+    {
+    }
+    ;
+    LatLng(real _lat, real _lng)
+            : lat(_lat),
+              lng(_lng)
+    {
+    }
+    ;
+} LatLng;
+
+typedef struct OrbitalTerm
+{
+    real A;
+    real B;
+    real C;
+
+    OrbitalTerm()
+            : A(0.0),
+              B(0.0),
+              C(0.0)
+    {
+    }
+    ;
+    OrbitalTerm(real _A, real _B, real _C)
+            : A(_A),
+              B(_B),
+              C(_C)
+    {
+    }
+    ;
+} OrbitalTerm;
+
 }
 }
 

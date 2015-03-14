@@ -44,66 +44,87 @@ namespace tsc
 {
 namespace Time
 {
-    typedef struct ChristianDate
+typedef struct ChristianDate
+{
+    integer year;
+    integer month;
+    integer day;
+    integer hour;
+    integer minute;
+    integer second;
+
+    ChristianDate(integer _year, integer _month, integer _day, integer _hour,
+                  integer _minute, integer _second)
+            : year(_year),
+              month(_month),
+              day(_day),
+              hour(_hour),
+              minute(_minute),
+              second(_second)
     {
-        integer year;
-        integer month;
-        integer day;
-        integer hour;
-        integer minute;
-        integer second;
-
-        ChristianDate(integer _year, integer _month, integer _day, integer _hour, integer _minute, integer _second) : year(_year), month(_month), day(_day), hour(_hour), minute(_minute), second(_second) { };
-        ChristianDate(integer _year, integer _month, real _day) : year(_year), month(_month), day(AstroMath::INT(_day)), hour(AstroMath::INT((_day - day)*24)), minute(AstroMath::INT((((_day - day)*24 - hour))*60)), second(AstroMath::INT((((_day - day)*24 - hour)*60 - minute)*60)) { };
-    } ChristianDate;
-
-    class Stardate
+    }
+    ;
+    ChristianDate(integer _year, integer _month, real _day)
+            : year(_year),
+              month(_month),
+              day(AstroMath::INT(_day)),
+              hour(AstroMath::INT((_day - day) * 24)),
+              minute(AstroMath::INT((((_day - day) * 24 - hour)) * 60)),
+              second(AstroMath::INT(
+                      (((_day - day) * 24 - hour) * 60 - minute) * 60))
     {
-        public:
-            Stardate(real JD);
-            ~Stardate();
-            static Stardate fromDate(ChristianDate date);
-            static Stardate fromJulianDate(ChristianDate date);
-            static Stardate fromGregorianDate(ChristianDate date);
-            void addDays(integer days);
-            real toJD() const;
-            real J2000() const;
-            real J2000c() const;
-            real J2000m() const;
-            real J2000m(real dt) const;
-            bool isJulian() const;
-            bool isGregorian() const;
-            Degree meanSidereal();
-            void nutation(Degree& Psi, Degree& dE);
-            void nutation(Degree& Psi, Degree& dE, bool trueObliq);
-            Degree meanObliquity();
-            Degree apparentSidereal();
+    }
+    ;
+} ChristianDate;
 
-            ChristianDate toGregorianDate() const;
-            std::string toGregorianDateStr() const;
+class Stardate
+{
+ public:
+    Stardate(real JD);
+    ~Stardate();
+    static Stardate fromDate(ChristianDate date);
+    static Stardate fromJulianDate(ChristianDate date);
+    static Stardate fromGregorianDate(ChristianDate date);
+    void addDays(integer days);
+    real toJD() const;
+    real J2000() const;
+    real J2000c() const;
+    real J2000m() const;
+    real J2000m(real dt) const;
+    bool isJulian() const;
+    bool isGregorian() const;
+    Degree meanSidereal();
+    void nutation(Degree& Psi, Degree& dE);
+    void nutation(Degree& Psi, Degree& dE, bool trueObliq);
+    Degree meanObliquity();
+    Degree apparentSidereal();
 
-            bool operator==(Stardate& param) const;
-            bool operator!=(Stardate& param) const;
-            bool operator<(Stardate& param) const;
-            bool operator>(Stardate& param) const;
-            bool operator<=(Stardate& param) const;
-            bool operator>=(Stardate& param) const;
-            bool operator==(const Stardate& param) const;
-            bool operator!=(const Stardate& param) const;
-            bool operator<(const Stardate& param) const;
-            bool operator>(const Stardate& param) const;
-            bool operator<=(const Stardate& param) const;
-            bool operator>=(const Stardate& param) const;
+    ChristianDate toGregorianDate() const;
+    std::string toGregorianDateStr() const;
 
-            friend std::ostream& operator<<(std::ostream& stream, const Stardate& param);
-        private:
-            real _JD;
-    };
+    bool operator==(Stardate& param) const;
+    bool operator!=(Stardate& param) const;
+    bool operator<(Stardate& param) const;
+    bool operator>(Stardate& param) const;
+    bool operator<=(Stardate& param) const;
+    bool operator>=(Stardate& param) const;
+    bool operator==(const Stardate& param) const;
+    bool operator!=(const Stardate& param) const;
+    bool operator<(const Stardate& param) const;
+    bool operator>(const Stardate& param) const;
+    bool operator<=(const Stardate& param) const;
+    bool operator>=(const Stardate& param) const;
 
-    std::ostream& operator<<(std::ostream& stream, const Stardate& param);
+    friend std::ostream& operator<<(std::ostream& stream,
+                                    const Stardate& param);
+ private:
+    real _JD;
+};
 
-    const Stardate GREGORIAN_START(2298883.5);
-    extern real nutationTerms[63][9];
+std::ostream& operator<<(std::ostream& stream, const Stardate& param);
+
+const Stardate GREGORIAN_START(2298883.5);
+extern real nutationTerms[63][9];
 }
 }
 

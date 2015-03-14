@@ -51,6 +51,6 @@ void TestStardate::testComparisons()
     CPPUNIT_ASSERT(d3 <= d1);
     CPPUNIT_ASSERT(d2 != d4);
     CPPUNIT_ASSERT(d4 == d6);
-    
+
 }
 

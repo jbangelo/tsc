@@ -39,8 +39,8 @@ using tsc::Time::NutationTerms;
 using tsc::Time::ChristianDate;
 using tsc::Math::AstroMath;
 
-Stardate::Stardate(real JD) :
-    _JD(JD)
+Stardate::Stardate(real JD)
+        : _JD(JD)
 {
 
 }
@@ -64,20 +64,24 @@ Stardate Stardate::fromDate(ChristianDate date)
 
 Stardate Stardate::fromJulianDate(ChristianDate date)
 {
-    real D = date.day + (date.hour + (date.minute + (date.second/60.0))/60.0)/24.0;
+    real D = date.day
+            + (date.hour + (date.minute + (date.second / 60.0)) / 60.0) / 24.0;
 
     if (date.month <= 2)
     {
         date.year -= 1;
         date.month += 12;
     }
-    
-    return Stardate(int(365.25*(date.year+4716)) + int(30.6001*(date.month+1)) + D - 1524.5);
+
+    return Stardate(
+            int(365.25 * (date.year + 4716)) + int(30.6001 * (date.month + 1))
+                    + D - 1524.5);
 }
 
 Stardate Stardate::fromGregorianDate(ChristianDate date)
 {
-    real D = date.day + (date.hour + (date.minute + (date.second/60.0))/60.0)/24.0;
+    real D = date.day
+            + (date.hour + (date.minute + (date.second / 60.0)) / 60.0) / 24.0;
     integer A = 0, B = 0;
 
     if (date.month <= 2)
@@ -85,11 +89,13 @@ Stardate Stardate::fromGregorianDate(ChristianDate date)
         date.year -= 1;
         date.month += 12;
     }
-    
-    A = int(date.year/100);
-    B = 2 - A + int(A/4);
-    
-    return Stardate(int(365.25*(date.year+4716)) + int(30.6001*(date.month+1)) + D + B - 1524.5);
+
+    A = int(date.year / 100);
+    B = 2 - A + int(A / 4);
+
+    return Stardate(
+            int(365.25 * (date.year + 4716)) + int(30.6001 * (date.month + 1))
+                    + D + B - 1524.5);
 }
 
 void Stardate::addDays(integer days)
@@ -104,12 +110,12 @@ real Stardate::toJD() const
 
 real Stardate::J2000() const
 {
-    return _JD-2451545.0L;
+    return _JD - 2451545.0L;
 }
 
 real Stardate::J2000c() const
 {
-    return this->J2000()/36525.0L;
+    return this->J2000() / 36525.0L;
 }
 
 real Stardate::J2000m() const
@@ -119,7 +125,7 @@ real Stardate::J2000m() const
 
 real Stardate::J2000m(real dt) const
 {
-    return (J2000() - dt)/365250.0L;
+    return (J2000() - dt) / 365250.0L;
 }
 
 bool Stardate::isJulian() const
@@ -135,7 +141,8 @@ bool Stardate::isGregorian() const
 Degree Stardate::meanSidereal()
 {
     real T = this->J2000c();
-    real meanSidereal = 280.46061838 + 360.98564736629*(this->_JD-2451545.0) + 0.000387933*T*T - (T*T*T)/38710000.0;
+    real meanSidereal = 280.46061838 + 360.98564736629 * (this->_JD - 2451545.0)
+            + 0.000387933 * T * T - (T * T * T) / 38710000.0;
 
     while (meanSidereal < 0.0)
     {
@@ -159,40 +166,50 @@ void Stardate::nutation(Degree& Psi, Degree& E, bool trueObliq)
 {
     real T = this->J2000c();
 
-    real Omega = 125.04452 - 1934.136261*T + 0.0020708*T*T + (T*T*T)/450000;
-    real D = (297.85036 +445267.111480*T - 0.0019142*T*T + (T*T*T)/189474);
-    real M = (357.52772 + 35999.050340*T - 0.0001603*T*T - (T*T*T)/300000);
-    real Mp= (134.96298 + 477198.867398*T + 0.0086972*T*T + (T*T*T)/56250);
-    real F = (93.27191 + 483202.017538*T - 0.0036825*T*T + (T*T*T)/327270);
+    real Omega = 125.04452 - 1934.136261 * T + 0.0020708 * T * T
+            + (T * T * T) / 450000;
+    real D = (297.85036 + 445267.111480 * T - 0.0019142 * T * T
+            + (T * T * T) / 189474);
+    real M = (357.52772 + 35999.050340 * T - 0.0001603 * T * T
+            - (T * T * T) / 300000);
+    real Mp = (134.96298 + 477198.867398 * T + 0.0086972 * T * T
+            + (T * T * T) / 56250);
+    real F = (93.27191 + 483202.017538 * T - 0.0036825 * T * T
+            + (T * T * T) / 327270);
     real dPsi = 0.0, dE = 0.0;
 
     for (int i = 0; i < tsc::Time::NutationTermCount; i++)
     {
         real *t = NutationTerms[i];
-        Degree arg(D*t[0] + M*t[1] + Mp*t[2] + F*t[3] + Omega*t[4]);
-        dPsi += (t[5]+(t[6]*T))*Degree::sin(arg);
-        dE += (t[7]+(t[8]*T))*Degree::cos(arg);
+        Degree arg(D * t[0] + M * t[1] + Mp * t[2] + F * t[3] + Omega * t[4]);
+        dPsi += (t[5] + (t[6] * T)) * Degree::sin(arg);
+        dE += (t[7] + (t[8] * T)) * Degree::cos(arg);
     }
 
     if (trueObliq)
     {
-        E = this->meanObliquity() + Degree::fromDMS(0,0,dE*0.0001);
+        E = this->meanObliquity() + Degree::fromDMS(0, 0, dE * 0.0001);
     }
     else
     {
-        E = Degree::fromDMS(0,0,dE*0.0001);
+        E = Degree::fromDMS(0, 0, dE * 0.0001);
     }
 
-    Psi = Degree::fromHMS(0,0,dPsi*0.0001);
+    Psi = Degree::fromHMS(0, 0, dPsi * 0.0001);
 }
 
 Degree Stardate::meanObliquity()
 {
 
     real T = this->J2000c();
-    real U = T/100.0;
+    real U = T / 100.0;
 
-    Degree E0 = Degree::fromDMS(23,26,21.448)-Degree::fromDMS(0,0,4680.93)*U - 1.55*U*U + 1999.25*U*U*U - 51.38*AstroMath::power(U,4) - 249.67*AstroMath::power(U,5) - 39.05*AstroMath::power(U,6) + 7.12*AstroMath::power(U,7) + 27.87*AstroMath::power(U,8) + 5.79*AstroMath::power(U,9) + 2.45*AstroMath::power(U,10);
+    Degree E0 = Degree::fromDMS(23, 26, 21.448)
+            - Degree::fromDMS(0, 0, 4680.93) * U - 1.55 * U * U
+            + 1999.25 * U * U * U - 51.38 * AstroMath::power(U, 4)
+            - 249.67 * AstroMath::power(U, 5) - 39.05 * AstroMath::power(U, 6)
+            + 7.12 * AstroMath::power(U, 7) + 27.87 * AstroMath::power(U, 8)
+            + 5.79 * AstroMath::power(U, 9) + 2.45 * AstroMath::power(U, 10);
 
     return E0;
 }
@@ -203,14 +220,14 @@ Degree Stardate::apparentSidereal()
 
     this->nutation(Psi, E, true);
 
-    nutation = (Psi/15.0)*Degree(Degree::cos(E));
+    nutation = (Psi / 15.0) * Degree(Degree::cos(E));
 
     return this->meanSidereal() + nutation;
 }
 
 ChristianDate Stardate::toGregorianDate() const
 {
-    ChristianDate date(0,0,0,0,0,0);
+    ChristianDate date(0, 0, 0, 0, 0, 0);
     real jdMod = this->_JD + 0.5;
     integer Z = int(jdMod);
     real F = jdMod - Z;
@@ -223,16 +240,16 @@ ChristianDate Stardate::toGregorianDate() const
     }
     else
     {
-        integer alpha = AstroMath::INT((Z - 1867216.25)/36524.25);
-        A = Z + 1 + alpha - AstroMath::INT(alpha/4.0);
+        integer alpha = AstroMath::INT((Z - 1867216.25) / 36524.25);
+        A = Z + 1 + alpha - AstroMath::INT(alpha / 4.0);
     }
 
     B = A + 1524;
-    C = AstroMath::INT((B - 122.1)/365.25);
-    D = AstroMath::INT(365.25*C);
-    E = AstroMath::INT((B-D)/30.6001);
+    C = AstroMath::INT((B - 122.1) / 365.25);
+    D = AstroMath::INT(365.25 * C);
+    E = AstroMath::INT((B - D) / 30.6001);
 
-    fullDay = B - D - AstroMath::INT(30.6001*E) + F;
+    fullDay = B - D - AstroMath::INT(30.6001 * E) + F;
 
     if (E < 14)
     {
@@ -255,10 +272,10 @@ ChristianDate Stardate::toGregorianDate() const
     date.day = AstroMath::INT(fullDay);
     dayFraction = fullDay - date.day;
 
-    date.hour = AstroMath::INT(dayFraction*24.0);
-    dayFraction = (dayFraction*24.0) - date.hour;
-    date.minute = AstroMath::INT(dayFraction*60.0);
-    dayFraction = (dayFraction*60.0) - date.minute;
+    date.hour = AstroMath::INT(dayFraction * 24.0);
+    dayFraction = (dayFraction * 24.0) - date.hour;
+    date.minute = AstroMath::INT(dayFraction * 60.0);
+    dayFraction = (dayFraction * 60.0) - date.minute;
     date.second = AstroMath::INT(dayFraction * 60.0);
 
     return date;
@@ -316,7 +333,7 @@ std::string Stardate::toGregorianDateStr() const
 
     oss << monthStr << " " << date.day << ", ";
     oss << AstroMath::absoluteValue(date.year);
-    oss << (AstroMath::sign(date.year)==-1?" B.C.E. ":" C.E. ");
+    oss << (AstroMath::sign(date.year) == -1 ? " B.C.E. " : " C.E. ");
     oss << date.hour << ":" << date.minute << ":" << date.second;
 
     return oss.str();
@@ -384,7 +401,7 @@ bool Stardate::operator>=(const Stardate& param) const
 
 std::ostream& tsc::Time::operator<<(std::ostream& stream, const Stardate& param)
 {
-        //stream << std::setprecision(30);
+    //stream << std::setprecision(30);
     stream << param.toJD() << "(" << param.toGregorianDateStr() << ")";
     return stream;
 }
