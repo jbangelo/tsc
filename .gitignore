@@ -2,3 +2,5 @@
 *.o
 *.a
 *~
+tsc/Release/
+tsc/Debug/
