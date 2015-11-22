@@ -39,7 +39,7 @@ namespace SkyObject
 class Sun : public Planet
 {
  public:
-    Sun(tsc::Utils::IDataStorage& dataStorage, IPlanet& earth);
+    Sun(tsc::Utils::IDataStorage& dataStorage, Planet& earth);
     ~Sun();
     virtual void calculatePosition(Stardate date);
 

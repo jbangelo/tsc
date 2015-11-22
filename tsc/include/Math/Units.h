@@ -38,6 +38,7 @@ namespace tsc
 {
 namespace Math
 {
+
 typedef struct HorizontalCoords
 {
     Degree alt;
@@ -46,21 +47,15 @@ typedef struct HorizontalCoords
     HorizontalCoords()
             : alt(0.0),
               az(0.0)
-    {
-    }
-    ;
+    { };
     HorizontalCoords(Degree _alt, Degree _az)
             : alt(_alt),
               az(_az)
-    {
-    }
-    ;
+    { };
     HorizontalCoords(real _alt, real _az)
             : alt(_alt),
               az(_az)
-    {
-    }
-    ;
+    { };
 } HorizontalCoords;
 
 typedef struct EquatorialCoords
@@ -71,15 +66,11 @@ typedef struct EquatorialCoords
     EquatorialCoords()
             : ra(0.0),
               dec(0.0)
-    {
-    }
-    ;
+    { };
     EquatorialCoords(Degree _ra, Degree _dec)
             : ra(_ra),
               dec(_dec)
-    {
-    }
-    ;
+    { };
 } EquatorialCoords;
 
 typedef struct EclipticCoords
@@ -92,23 +83,17 @@ typedef struct EclipticCoords
             : lambda(0.0),
               beta(0.0),
               delta(0.0)
-    {
-    }
-    ;
+    { };
     EclipticCoords(Degree _lambda, Degree _beta)
             : lambda(_lambda),
               beta(_beta),
               delta(0.0)
-    {
-    }
-    ;
+    { };
     EclipticCoords(Degree _lambda, Degree _beta, real _delta)
             : lambda(_lambda),
               beta(_beta),
               delta(_delta)
-    {
-    }
-    ;
+    { };
 } EclipticCoords;
 
 typedef struct CartesianCoords
@@ -121,16 +106,12 @@ typedef struct CartesianCoords
             : x(0.0),
               y(0.0),
               z(0.0)
-    {
-    }
-    ;
+    { };
     CartesianCoords(real _x, real _y, real _z)
             : x(_x),
               y(_y),
               z(_z)
-    {
-    }
-    ;
+    { };
 } CartesianCoords;
 
 typedef struct LatLng
@@ -141,21 +122,15 @@ typedef struct LatLng
     LatLng()
             : lat(0.0),
               lng(0.0)
-    {
-    }
-    ;
+    { };
     LatLng(Degree _lat, Degree _lng)
             : lat(_lat),
               lng(_lng)
-    {
-    }
-    ;
+    { };
     LatLng(real _lat, real _lng)
             : lat(_lat),
               lng(_lng)
-    {
-    }
-    ;
+    { };
 } LatLng;
 
 typedef struct OrbitalTerm
@@ -168,16 +143,12 @@ typedef struct OrbitalTerm
             : A(0.0),
               B(0.0),
               C(0.0)
-    {
-    }
-    ;
+    { };
     OrbitalTerm(real _A, real _B, real _C)
             : A(_A),
               B(_B),
               C(_C)
-    {
-    }
-    ;
+    { };
 } OrbitalTerm;
 
 }

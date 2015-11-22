@@ -11,9 +11,16 @@
 #include <stdio.h>
 #include "Math/Degree.h"
 #include "Time/Stardate.h"
-#include "SkyObject/Planet.h"
+#include "SkyObject/PlanetFactory.h"
+#include "Utils/SqliteStorage.h"
+#include "Math/Units.h"
 
 using namespace std;
+using tsc::Utils::SqliteStorage;
+using tsc::SkyObject::Planet;
+using tsc::SkyObject::PlanetFactory;
+using tsc::Math::LatLng;
+using tsc::Math::HorizontalCoords;
 
 void printUsage(const char* progname);
 bool parseDegree(const char* str, tsc::Math::Degree& deg);
@@ -73,6 +80,7 @@ int main(int argc, char** argv)
 	if (!latParsed || !lngParsed || !dateParsed)
 	{
 		cerr << "A date, latitude, and longitude must be provided!" << endl;
+		printUsage(argv[0]);
 		return 1;
 	}
 
@@ -80,7 +88,38 @@ int main(int argc, char** argv)
 	cout << "Longitude = " << lng.degStr() << endl;
 	cout << "Date = " << date.toGregorianDateStr() << endl;
 
-	//tsc::SkyObject::Planet earth(tsc::SkyObject::Planet::EARTH)
+	cout << "Loading planets" << endl;
+	cout << flush;
+	SqliteStorage storage("../../resources/tsc.db");
+	PlanetFactory planetFactory(storage);
+
+	Planet& mercury = planetFactory.getPlanet(PlanetFactory::MERCURY);
+	Planet& venus = planetFactory.getPlanet(PlanetFactory::VENUS);
+	Planet& mars = planetFactory.getPlanet(PlanetFactory::MARS);
+	Planet& jupiter = planetFactory.getPlanet(PlanetFactory::JUPITER);
+	Planet& saturn = planetFactory.getPlanet(PlanetFactory::SATURN);
+	Planet& uranus = planetFactory.getPlanet(PlanetFactory::URANUS);
+	Planet& neptune = planetFactory.getPlanet(PlanetFactory::NEPTUNE);
+
+	cout << "Calculating positions" << endl;
+	cout << flush;
+	mercury.calculatePosition(date);
+	venus.calculatePosition(date);
+	mars.calculatePosition(date);
+	jupiter.calculatePosition(date);
+	saturn.calculatePosition(date);
+	uranus.calculatePosition(date);
+	neptune.calculatePosition(date);
+
+	LatLng location(lat, lng);
+
+	HorizontalCoords mercuryCoords = mercury.getHorizontalCoords(location, date);
+	HorizontalCoords venusCoords = venus.getHorizontalCoords(location, date);
+	HorizontalCoords marsCoords = mars.getHorizontalCoords(location, date);
+	HorizontalCoords jupiterCoords = jupiter.getHorizontalCoords(location, date);
+	HorizontalCoords saturnCoords = saturn.getHorizontalCoords(location, date);
+	HorizontalCoords uranusCoords = uranus.getHorizontalCoords(location, date);
+	HorizontalCoords neptuneCoords = neptune.getHorizontalCoords(location, date);
 	return 0;
 }
 

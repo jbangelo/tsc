@@ -31,7 +31,6 @@
 #define PLANET_H_
 
 #include <vector>
-#include "SkyObject/IPlanet.h"
 #include "SkyObject/SkyObject.h"
 #include "Math/Degree.h"
 #include "Math/Units.h"
@@ -41,7 +40,7 @@ namespace tsc
 {
 namespace SkyObject
 {
-class Planet : public SkyObject, public IPlanet
+class Planet : public SkyObject
 {
  public:
     enum PlanetCode
@@ -57,7 +56,7 @@ class Planet : public SkyObject, public IPlanet
         NEPTUNE = 800,
     };
 
-    Planet(PlanetCode pid, tsc::Utils::IDataStorage& dataStorage, IPlanet& earth);
+    Planet(PlanetCode pid, tsc::Utils::IDataStorage& dataStorage, Planet& earth);
     ~Planet();
     virtual void calculatePosition(tsc::Time::Stardate date);
     virtual tsc::Math::EclipticCoords getHeliocentricEclipticCoords();
@@ -80,7 +79,7 @@ class Planet : public SkyObject, public IPlanet
 
     PlanetCode _pid;
     tsc::Utils::IDataStorage& _dataStorage;
-    IPlanet& _earth;
+    Planet& _earth;
     bool _isEarth;
 
     // Heliocentric Coordinates

@@ -9,7 +9,7 @@
 #define PLANETFACTORY_H_
 
 #include "Utils/IDataStorage.h"
-#include "SkyObject/IPlanet.h"
+#include "SkyObject/Planet.h"
 
 namespace tsc
 {
@@ -34,11 +34,11 @@ class PlanetFactory
 		};
 		PlanetFactory(tsc::Utils::IDataStorage& dataStorage);
 		~PlanetFactory();
-		IPlanet& getPlanet(Planets planet);
+		Planet& getPlanet(Planets planet);
 	private:
 
 		tsc::Utils::IDataStorage& _dataStorage;
-		IPlanet* _planets[PLANET_COUNT];
+		Planet* _planets[PLANET_COUNT];
 };
 
 }

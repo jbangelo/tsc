@@ -11,7 +11,6 @@
 #include "SkyObject/Sun.h"
 #include "Utils/SqliteStorage.h"
 
-using tsc::SkyObject::IPlanet;
 using tsc::SkyObject::Earth;
 using tsc::SkyObject::Planet;
 using tsc::SkyObject::PlanetFactory;
@@ -41,7 +40,7 @@ PlanetFactory::~PlanetFactory()
 	}
 }
 
-IPlanet& PlanetFactory::getPlanet(Planets planet)
+Planet& PlanetFactory::getPlanet(Planets planet)
 {
 	return *_planets[planet];
 }

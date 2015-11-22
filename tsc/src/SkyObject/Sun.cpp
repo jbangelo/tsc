@@ -44,7 +44,7 @@ using tsc::SkyObject::Planet;
 using tsc::SkyObject::SkyObject;
 using tsc::Utils::IDataStorage;
 
-Sun::Sun(IDataStorage& dataStorage, IPlanet& earth)
+Sun::Sun(IDataStorage& dataStorage, Planet& earth)
         : Planet(SUN, dataStorage, earth)
 {
 

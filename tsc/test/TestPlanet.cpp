@@ -3,11 +3,11 @@
 #include "TestPlanet.h"
 #include "Time/Stardate.h"
 #include "Math/Units.h"
-#include "SkyObject/IPlanet.h"
+#include "SkyObject/Planet.h"
 
 using tsc::Time::Stardate;
 using tsc::Math::EclipticCoords;
-using tsc::SkyObject::IPlanet;
+using tsc::SkyObject::Planet;
 using tsc::Utils::SqliteStorage;
 using tsc::SkyObject::PlanetFactory;
 
@@ -28,7 +28,7 @@ void TestPlanet::tearDown()
 
 void TestPlanet::testMercury()
 {
-    IPlanet& merc = _planetFactory->getPlanet(PlanetFactory::MERCURY);
+    Planet& merc = _planetFactory->getPlanet(PlanetFactory::MERCURY);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(4.4293481036),
@@ -65,7 +65,7 @@ void TestPlanet::testMercury()
 
 void TestPlanet::testVenus()
 {
-    IPlanet& venus = _planetFactory->getPlanet(PlanetFactory::VENUS);
+    Planet& venus = _planetFactory->getPlanet(PlanetFactory::VENUS);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(3.1870221833),
@@ -102,7 +102,7 @@ void TestPlanet::testVenus()
 
 void TestPlanet::testEarth()
 {
-    IPlanet& earth = _planetFactory->getPlanet(PlanetFactory::EARTH);
+    Planet& earth = _planetFactory->getPlanet(PlanetFactory::EARTH);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(1.7519238681),
@@ -139,7 +139,7 @@ void TestPlanet::testEarth()
 
 void TestPlanet::testMars()
 {
-    IPlanet& mars = _planetFactory->getPlanet(PlanetFactory::MARS);
+    Planet& mars = _planetFactory->getPlanet(PlanetFactory::MARS);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(6.2735389983),
@@ -176,7 +176,7 @@ void TestPlanet::testMars()
 
 void TestPlanet::testJupiter()
 {
-    IPlanet& jupiter = _planetFactory->getPlanet(PlanetFactory::JUPITER);
+    Planet& jupiter = _planetFactory->getPlanet(PlanetFactory::JUPITER);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(.6334614186),
@@ -213,7 +213,7 @@ void TestPlanet::testJupiter()
 
 void TestPlanet::testSaturn()
 {
-    IPlanet& saturn = _planetFactory->getPlanet(PlanetFactory::SATURN);
+    Planet& saturn = _planetFactory->getPlanet(PlanetFactory::SATURN);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(.7980038761),
@@ -250,7 +250,7 @@ void TestPlanet::testSaturn()
 
 void TestPlanet::testUranus()
 {
-    IPlanet& uranus = _planetFactory->getPlanet(PlanetFactory::URANUS);
+    Planet& uranus = _planetFactory->getPlanet(PlanetFactory::URANUS);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(5.5225485803),
@@ -287,7 +287,7 @@ void TestPlanet::testUranus()
 
 void TestPlanet::testNeptune()
 {
-    IPlanet& neptune = _planetFactory->getPlanet(PlanetFactory::NEPTUNE);
+    Planet& neptune = _planetFactory->getPlanet(PlanetFactory::NEPTUNE);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(5.3045629252),

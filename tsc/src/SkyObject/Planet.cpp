@@ -44,7 +44,7 @@ using tsc::SkyObject::Planet;
 using tsc::SkyObject::SkyObject;
 using tsc::Utils::IDataStorage;
 
-Planet::Planet(PlanetCode pid, IDataStorage& dataStorage, IPlanet& earth)
+Planet::Planet(PlanetCode pid, IDataStorage& dataStorage, Planet& earth)
         : SkyObject(),
           _pid(pid),
           _dataStorage(dataStorage),
