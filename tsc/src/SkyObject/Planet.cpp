@@ -33,13 +33,23 @@
 #include "Math/AstroMath.h"
 #include "Utils/ToString.h"
 
-using tsc::SkyObject::Planet;
+using std::vector;
 using tsc::Math::AstroMath;
+using tsc::Math::CartesianCoords;
+using tsc::Math::Degree;
+using tsc::Math::EquatorialCoords;
+using tsc::Math::EclipticCoords;
+using tsc::Math::OrbitalTerm;
+using tsc::SkyObject::Planet;
+using tsc::SkyObject::SkyObject;
+using tsc::Utils::IDataStorage;
 
-Planet::Planet(PlanetCode pid, sqlite3* db, Planet* earth)
+Planet::Planet(PlanetCode pid, IDataStorage& dataStorage, IPlanet& earth)
         : SkyObject(),
           _pid(pid),
-          _db(db),
+          _dataStorage(dataStorage),
+          _earth(earth),
+          _isEarth(false),
           _heliocentricEcliptic(),
           _geocentricCartesian(),
           _geocentricEcliptic(),
@@ -53,15 +63,6 @@ Planet::Planet(PlanetCode pid, sqlite3* db, Planet* earth)
           _BTerms(),
           _RTerms()
 {
-    if (pid == EARTH)
-    {
-        _earth = NULL;
-    }
-    else
-    {
-        _earth = earth;
-    }
-
     loadData();
 }
 
@@ -72,6 +73,11 @@ Planet::~Planet()
 
 void Planet::calculatePosition(Stardate date)
 {
+	if (!_isEarth)
+	{
+		_earth.calculatePosition(date);
+	}
+
     real millenia = date.J2000m();
 
     _heliocentricEcliptic = calculateHeliocentricEclipticCoords(millenia);
@@ -143,11 +149,11 @@ EclipticCoords Planet::calculateHeliocentricEclipticCoords(real millenia)
 {
     EclipticCoords newCoords;
 
-    newCoords.lambda = Degree::fromRad(Planet::sumTerms(_LTerms, millenia));
+    newCoords.lambda = Degree::fromRad(sumTerms(_LTerms, millenia));
     newCoords.lambda.normalize();
-    newCoords.beta = Degree::fromRad(Planet::sumTerms(_BTerms, millenia));
+    newCoords.beta = Degree::fromRad(sumTerms(_BTerms, millenia));
     newCoords.beta.normalizeLatitude();
-    newCoords.delta = Planet::sumTerms(_RTerms, millenia);
+    newCoords.delta = sumTerms(_RTerms, millenia);
 
     return newCoords;
 }
@@ -155,12 +161,16 @@ EclipticCoords Planet::calculateHeliocentricEclipticCoords(real millenia)
 CartesianCoords Planet::calculateGeocentricCartesianCoords(
         EclipticCoords heliocentricCoords)
 {
-    EclipticCoords earthCoords(0.0, 0.0, 0.0);
+    EclipticCoords earthCoords;
     CartesianCoords newCoords;
 
-    if (_earth != NULL)
+    if (!_isEarth)
     {
-        earthCoords = _earth->getGeocentricEclipticCoords();
+        earthCoords = _earth.getGeocentricEclipticCoords();
+    }
+    else
+    {
+    	earthCoords = EclipticCoords(0.0, 0.0, 0.0);
     }
 
     newCoords.x = _heliocentricEcliptic.delta
@@ -256,11 +266,15 @@ void Planet::calculateLightDelay(Stardate date)
 
 void Planet::calculateIlluminatedFraction()
 {
-    EclipticCoords earthCoords(0.0, 0.0, 0.0);
+    EclipticCoords earthCoords;
 
-    if (_earth != NULL)
+    if (!_isEarth)
     {
-        earthCoords = _earth->getHeliocentricEclipticCoords();
+        earthCoords = _earth.getHeliocentricEclipticCoords();
+    }
+    else
+    {
+    	earthCoords = EclipticCoords(0.0, 0.0, 0.0);
     }
 
     _i = Degree::acos(
@@ -280,53 +294,16 @@ void Planet::calcMag()
 
 bool Planet::loadData()
 {
-    sqlite3_stmt *preparedStatement;
-    const std::string sqlStatement1(
-            "SELECT rank,A,B,C FROM planets WHERE tid=");
-    const std::string sqlStatement2(" ORDER BY rank DESC;");
-
     for (int lbr = 0; lbr < 3; lbr++)
     {
         int order = 0;
         do
         {
             int tid = 4000 + static_cast<int>(_pid) + ((lbr + 1) * 10) + order;
-            std::string sqlStatement = sqlStatement1 + TO_STRING(tid)
-                    + sqlStatement2;
-            int returnCode;
-
-            if (sqlite3_prepare_v2(_db, sqlStatement.c_str(),
-                                   sqlStatement.length(), &preparedStatement,
-                                   NULL) != SQLITE_OK)
-            {
-                return false;
-            }
-            if (preparedStatement == NULL)
-            {
-                return false;
-            }
+            bool returnCode;
 
             vector<OrbitalTerm> *orderNTerms = new vector<OrbitalTerm>;
-            returnCode = sqlite3_step(preparedStatement);
-            while (returnCode == SQLITE_ROW)
-            {
-                unsigned int rank;
-                OrbitalTerm term;
-                rank = sqlite3_column_int(preparedStatement, 0);
-                term.A = sqlite3_column_double(preparedStatement, 1);
-                term.B = sqlite3_column_double(preparedStatement, 2);
-                term.C = sqlite3_column_double(preparedStatement, 3);
-
-                if (rank > orderNTerms->capacity())
-                {
-                    orderNTerms->resize(rank);
-                }
-
-                orderNTerms->at(rank - 1) = term;
-                returnCode = sqlite3_step(preparedStatement);
-            }
-
-            //std::cout << "Order " << order << " terms are " << orderNTerms->size() << " elements long." << std::endl;
+            returnCode = _dataStorage.getOrbitalTerms(tid, *orderNTerms);
 
             switch (lbr)
             {
@@ -340,17 +317,15 @@ bool Planet::loadData()
                     _RTerms.push_back(orderNTerms);
                     break;
             }
+            orderNTerms = NULL;
 
-            sqlite3_finalize(preparedStatement);
-
-            if (returnCode == SQLITE_DONE)
+            if (returnCode)
             {
                 order++;
             }
             else
             {
-                std::cerr << "Error accessing database: "
-                          << /*sqlite3_errstr(returnCode) <<*/std::endl;
+                std::cerr << "Error accessing data." << std::endl;
                 return false;
             }
         } while (order < 6);

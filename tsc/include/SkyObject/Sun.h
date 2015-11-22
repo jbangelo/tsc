@@ -32,8 +32,6 @@
 
 #include "Planet.h"
 
-using tsc::SkyObject::Planet;
-
 namespace tsc
 {
 namespace SkyObject
@@ -41,16 +39,16 @@ namespace SkyObject
 class Sun : public Planet
 {
  public:
-    Sun(sqlite3* db, Planet* earth);
+    Sun(tsc::Utils::IDataStorage& dataStorage, IPlanet& earth);
     ~Sun();
     virtual void calculatePosition(Stardate date);
 
  protected:
-    virtual EclipticCoords calculateHeliocentricEclipticCoords();
-    virtual CartesianCoords calculateGeocentricCartesianCoords(
-            EclipticCoords geocentricCoords, Degree meanObliquity);
-    virtual EclipticCoords calculateGeocentricEclipticCoords();
-    virtual void calculateLightDelay(Stardate date);
+    virtual tsc::Math::EclipticCoords calculateHeliocentricEclipticCoords();
+    virtual tsc::Math::CartesianCoords calculateGeocentricCartesianCoords(
+    		tsc::Math::EclipticCoords geocentricCoords, tsc::Math::Degree meanObliquity);
+    virtual tsc::Math::EclipticCoords calculateGeocentricEclipticCoords();
+    virtual void calculateLightDelay(tsc::Time::Stardate date);
     virtual void calculateIlluminatedFraction();
 };
 }

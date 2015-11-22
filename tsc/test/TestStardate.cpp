@@ -1,5 +1,5 @@
 #include "Time/Stardate.h"
-#include "test/TestStardate.h"
+#include "TestStardate.h"
 
 using tsc::Time::Stardate;
 using tsc::Time::ChristianDate;

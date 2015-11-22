@@ -1,30 +1,34 @@
 #include <iostream>
 #include <iomanip>
-#include "test/TestPlanet.h"
+#include "TestPlanet.h"
 #include "Time/Stardate.h"
 #include "Math/Units.h"
+#include "SkyObject/IPlanet.h"
 
 using tsc::Time::Stardate;
 using tsc::Math::EclipticCoords;
+using tsc::SkyObject::IPlanet;
+using tsc::Utils::SqliteStorage;
+using tsc::SkyObject::PlanetFactory;
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION(TestPlanet);
 
 void TestPlanet::setUp()
 {
-    sqlite3_open_v2("../resources/tsc.db", &_db, SQLITE_OPEN_READONLY, NULL);
-    _earth = new Planet(Planet::EARTH, _db, NULL);
+	_storage = new SqliteStorage("../../resources/tsc.db");
+	_planetFactory = new PlanetFactory(*_storage);
 }
 
 void TestPlanet::tearDown()
 {
-    delete _earth;
-    sqlite3_close(_db);
+    delete _planetFactory;
+    delete _storage;
 }
 
 void TestPlanet::testMercury()
 {
-    Planet merc(Planet::MERCURY, _db, _earth);
+    IPlanet& merc = _planetFactory->getPlanet(PlanetFactory::MERCURY);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(4.4293481036),
@@ -41,19 +45,19 @@ void TestPlanet::testMercury()
     EclipticCoords calcedAnswer;
 
     merc.calculatePosition(d1);
-    calcedAnswer = merc.getGeocentricEclipticCoords();
+    calcedAnswer = merc.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     merc.calculatePosition(d2);
-    calcedAnswer = merc.getGeocentricEclipticCoords();
+    calcedAnswer = merc.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     merc.calculatePosition(d3);
-    calcedAnswer = merc.getGeocentricEclipticCoords();
+    calcedAnswer = merc.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);
@@ -61,7 +65,7 @@ void TestPlanet::testMercury()
 
 void TestPlanet::testVenus()
 {
-    Planet venus(Planet::VENUS, _db, _earth);
+    IPlanet& venus = _planetFactory->getPlanet(PlanetFactory::VENUS);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(3.1870221833),
@@ -78,19 +82,19 @@ void TestPlanet::testVenus()
     EclipticCoords calcedAnswer;
 
     venus.calculatePosition(d1);
-    calcedAnswer = venus.getGeocentricEclipticCoords();
+    calcedAnswer = venus.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     venus.calculatePosition(d2);
-    calcedAnswer = venus.getGeocentricEclipticCoords();
+    calcedAnswer = venus.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     venus.calculatePosition(d3);
-    calcedAnswer = venus.getGeocentricEclipticCoords();
+    calcedAnswer = venus.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);
@@ -98,7 +102,7 @@ void TestPlanet::testVenus()
 
 void TestPlanet::testEarth()
 {
-    Planet earth(Planet::EARTH, _db, NULL);
+    IPlanet& earth = _planetFactory->getPlanet(PlanetFactory::EARTH);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(1.7519238681),
@@ -115,19 +119,19 @@ void TestPlanet::testEarth()
     EclipticCoords calcedAnswer;
 
     earth.calculatePosition(d1);
-    calcedAnswer = earth.getGeocentricEclipticCoords();
+    calcedAnswer = earth.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     earth.calculatePosition(d2);
-    calcedAnswer = earth.getGeocentricEclipticCoords();
+    calcedAnswer = earth.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     earth.calculatePosition(d3);
-    calcedAnswer = earth.getGeocentricEclipticCoords();
+    calcedAnswer = earth.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);
@@ -135,7 +139,7 @@ void TestPlanet::testEarth()
 
 void TestPlanet::testMars()
 {
-    Planet mars(Planet::MARS, _db, _earth);
+    IPlanet& mars = _planetFactory->getPlanet(PlanetFactory::MARS);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(6.2735389983),
@@ -152,19 +156,19 @@ void TestPlanet::testMars()
     EclipticCoords calcedAnswer;
 
     mars.calculatePosition(d1);
-    calcedAnswer = mars.getGeocentricEclipticCoords();
+    calcedAnswer = mars.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     mars.calculatePosition(d2);
-    calcedAnswer = mars.getGeocentricEclipticCoords();
+    calcedAnswer = mars.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     mars.calculatePosition(d3);
-    calcedAnswer = mars.getGeocentricEclipticCoords();
+    calcedAnswer = mars.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);
@@ -172,7 +176,7 @@ void TestPlanet::testMars()
 
 void TestPlanet::testJupiter()
 {
-    Planet jupiter(Planet::JUPITER, _db, _earth);
+    IPlanet& jupiter = _planetFactory->getPlanet(PlanetFactory::JUPITER);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(.6334614186),
@@ -189,19 +193,19 @@ void TestPlanet::testJupiter()
     EclipticCoords calcedAnswer;
 
     jupiter.calculatePosition(d1);
-    calcedAnswer = jupiter.getGeocentricEclipticCoords();
+    calcedAnswer = jupiter.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     jupiter.calculatePosition(d2);
-    calcedAnswer = jupiter.getGeocentricEclipticCoords();
+    calcedAnswer = jupiter.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     jupiter.calculatePosition(d3);
-    calcedAnswer = jupiter.getGeocentricEclipticCoords();
+    calcedAnswer = jupiter.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);
@@ -209,7 +213,7 @@ void TestPlanet::testJupiter()
 
 void TestPlanet::testSaturn()
 {
-    Planet saturn(Planet::SATURN, _db, _earth);
+    IPlanet& saturn = _planetFactory->getPlanet(PlanetFactory::SATURN);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(.7980038761),
@@ -226,19 +230,19 @@ void TestPlanet::testSaturn()
     EclipticCoords calcedAnswer;
 
     saturn.calculatePosition(d1);
-    calcedAnswer = saturn.getGeocentricEclipticCoords();
+    calcedAnswer = saturn.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     saturn.calculatePosition(d2);
-    calcedAnswer = saturn.getGeocentricEclipticCoords();
+    calcedAnswer = saturn.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     saturn.calculatePosition(d3);
-    calcedAnswer = saturn.getGeocentricEclipticCoords();
+    calcedAnswer = saturn.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);
@@ -246,7 +250,7 @@ void TestPlanet::testSaturn()
 
 void TestPlanet::testUranus()
 {
-    Planet uranus(Planet::URANUS, _db, _earth);
+    IPlanet& uranus = _planetFactory->getPlanet(PlanetFactory::URANUS);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(5.5225485803),
@@ -263,19 +267,19 @@ void TestPlanet::testUranus()
     EclipticCoords calcedAnswer;
 
     uranus.calculatePosition(d1);
-    calcedAnswer = uranus.getGeocentricEclipticCoords();
+    calcedAnswer = uranus.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     uranus.calculatePosition(d2);
-    calcedAnswer = uranus.getGeocentricEclipticCoords();
+    calcedAnswer = uranus.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     uranus.calculatePosition(d3);
-    calcedAnswer = uranus.getGeocentricEclipticCoords();
+    calcedAnswer = uranus.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);
@@ -283,7 +287,7 @@ void TestPlanet::testUranus()
 
 void TestPlanet::testNeptune()
 {
-    Planet neptune(Planet::NEPTUNE, _db, _earth);
+    IPlanet& neptune = _planetFactory->getPlanet(PlanetFactory::NEPTUNE);
 
     Stardate d1(2451545.0);
     EclipticCoords answer1(Degree::fromRad(5.3045629252),
@@ -300,19 +304,19 @@ void TestPlanet::testNeptune()
     EclipticCoords calcedAnswer;
 
     neptune.calculatePosition(d1);
-    calcedAnswer = neptune.getGeocentricEclipticCoords();
+    calcedAnswer = neptune.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer1.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer1.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer1.delta - calcedAnswer.delta < 0.00000001);
 
     neptune.calculatePosition(d2);
-    calcedAnswer = neptune.getGeocentricEclipticCoords();
+    calcedAnswer = neptune.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer2.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer2.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer2.delta - calcedAnswer.delta < 0.00000001);
 
     neptune.calculatePosition(d3);
-    calcedAnswer = neptune.getGeocentricEclipticCoords();
+    calcedAnswer = neptune.getHeliocentricEclipticCoords();
     CPPUNIT_ASSERT(answer3.lambda - calcedAnswer.lambda < 0.00000001);
     CPPUNIT_ASSERT(answer3.beta - calcedAnswer.beta < 0.00000001);
     CPPUNIT_ASSERT(answer3.delta - calcedAnswer.delta < 0.00000001);

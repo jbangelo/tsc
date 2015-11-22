@@ -1,5 +1,5 @@
 #include "Math/Degree.h"
-#include "test/TestDegree.h"
+#include "TestDegree.h"
 
 using tsc::Math::Degree;
 

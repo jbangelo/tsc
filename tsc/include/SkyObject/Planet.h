@@ -31,24 +31,17 @@
 #define PLANET_H_
 
 #include <vector>
-#include <sqlite3.h>
+#include "SkyObject/IPlanet.h"
 #include "SkyObject/SkyObject.h"
 #include "Math/Degree.h"
 #include "Math/Units.h"
-
-using std::vector;
-using tsc::SkyObject::SkyObject;
-using tsc::Math::Degree;
-using tsc::Math::EquatorialCoords;
-using tsc::Math::EclipticCoords;
-using tsc::Math::CartesianCoords;
-using tsc::Math::OrbitalTerm;
+#include "Utils/IDataStorage.h"
 
 namespace tsc
 {
 namespace SkyObject
 {
-class Planet : public SkyObject
+class Planet : public SkyObject, public IPlanet
 {
  public:
     enum PlanetCode
@@ -64,43 +57,41 @@ class Planet : public SkyObject
         NEPTUNE = 800,
     };
 
-    Planet(PlanetCode pid, sqlite3* db, Planet* earth);
+    Planet(PlanetCode pid, tsc::Utils::IDataStorage& dataStorage, IPlanet& earth);
     ~Planet();
-    virtual void calculatePosition(Stardate date);
-    virtual EclipticCoords getHeliocentricEclipticCoords();
-    virtual EclipticCoords getGeocentricEclipticCoords();
-    virtual CartesianCoords getGeocentricCartesianCoords();
+    virtual void calculatePosition(tsc::Time::Stardate date);
+    virtual tsc::Math::EclipticCoords getHeliocentricEclipticCoords();
+    virtual tsc::Math::EclipticCoords getGeocentricEclipticCoords();
+    virtual tsc::Math::CartesianCoords getGeocentricCartesianCoords();
     virtual real getLightDelay();
     virtual real getIlluminatedFraction();
-    virtual Degree getPhaseAngle();
+    virtual tsc::Math::Degree getPhaseAngle();
 
  protected:
     virtual bool loadData();
-    static real sumTerms(vector<vector<OrbitalTerm>*> terms, real millenia);
-    virtual EclipticCoords calculateHeliocentricEclipticCoords(real millenia);
-    virtual CartesianCoords calculateGeocentricCartesianCoords(
-            EclipticCoords heliocentricCoords);
-    virtual EclipticCoords calculateGeocentricEclipticCoords(
-            CartesianCoords geocentricCoords);
-    virtual EquatorialCoords calculateGeocentricEquatorialCoords(
-            EclipticCoords geocentricCoords);
-    virtual void calculateLightDelay(Stardate date);
+    real sumTerms(std::vector<std::vector<tsc::Math::OrbitalTerm>*> terms, real millenia);
+    virtual tsc::Math::EclipticCoords calculateHeliocentricEclipticCoords(real millenia);
+    virtual tsc::Math::CartesianCoords calculateGeocentricCartesianCoords(tsc::Math::EclipticCoords heliocentricCoords);
+    virtual tsc::Math::EclipticCoords calculateGeocentricEclipticCoords(tsc::Math::CartesianCoords geocentricCoords);
+    virtual tsc::Math::EquatorialCoords calculateGeocentricEquatorialCoords(tsc::Math::EclipticCoords geocentricCoords);
+    virtual void calculateLightDelay(tsc::Time::Stardate date);
     virtual void calculateIlluminatedFraction();
     virtual void calcMag();
 
     PlanetCode _pid;
-    sqlite3* _db;
-    Planet* _earth;
+    tsc::Utils::IDataStorage& _dataStorage;
+    IPlanet& _earth;
+    bool _isEarth;
 
     // Heliocentric Coordinates
-    EclipticCoords _heliocentricEcliptic;
+    tsc::Math::EclipticCoords _heliocentricEcliptic;
 
     // Geocentric Coordinates
-    CartesianCoords _geocentricCartesian;
-    EclipticCoords _geocentricEcliptic;
+    tsc::Math::CartesianCoords _geocentricCartesian;
+    tsc::Math::EclipticCoords _geocentricEcliptic;
 
     // Phase angle to earth
-    Degree _i;
+    tsc::Math::Degree _i;
 
     // Illuminated portion (in %)
     real _k;
@@ -110,13 +101,13 @@ class Planet : public SkyObject
 
     // Light-time delay adjusted variables
 
-    EclipticCoords _heliocentricEclipticDelay;
-    CartesianCoords _geocentricCartesianDelay;
-    EclipticCoords _geocentricEclipticDelay;
+    tsc::Math::EclipticCoords _heliocentricEclipticDelay;
+    tsc::Math::CartesianCoords _geocentricCartesianDelay;
+    tsc::Math::EclipticCoords _geocentricEclipticDelay;
 
-    vector<vector<OrbitalTerm>*> _LTerms;
-    vector<vector<OrbitalTerm>*> _BTerms;
-    vector<vector<OrbitalTerm>*> _RTerms;
+    std::vector<std::vector<tsc::Math::OrbitalTerm>*> _LTerms;
+    std::vector<std::vector<tsc::Math::OrbitalTerm>*> _BTerms;
+    std::vector<std::vector<tsc::Math::OrbitalTerm>*> _RTerms;
 };
 }
 }

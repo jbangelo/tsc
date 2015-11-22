@@ -2,10 +2,9 @@
 #define TESTPLANET_H
 
 #include <cppunit/extensions/HelperMacros.h>
-#include <sqlite3.h>
-#include "SkyObject/Planet.h"
+#include "SkyObject/PlanetFactory.h"
+#include "Utils/SqliteStorage.h"
 
-using tsc::SkyObject::Planet;
 
 class TestPlanet : public CppUnit::TestFixture
 {
@@ -20,8 +19,8 @@ CPPUNIT_TEST_SUITE(TestPlanet);
         CPPUNIT_TEST(testNeptune);
     CPPUNIT_TEST_SUITE_END();
 
-    sqlite3* _db;
-    Planet* _earth;
+    tsc::Utils::SqliteStorage *_storage;
+    tsc::SkyObject::PlanetFactory *_planetFactory;
 
  public:
     void setUp();

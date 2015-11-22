@@ -32,11 +32,20 @@
 #include "SkyObject/Sun.h"
 #include "Math/AstroMath.h"
 
-using tsc::SkyObject::Sun;
+using std::vector;
 using tsc::Math::AstroMath;
+using tsc::Math::CartesianCoords;
+using tsc::Math::Degree;
+using tsc::Math::EquatorialCoords;
+using tsc::Math::EclipticCoords;
+using tsc::Math::OrbitalTerm;
+using tsc::SkyObject::Sun;
+using tsc::SkyObject::Planet;
+using tsc::SkyObject::SkyObject;
+using tsc::Utils::IDataStorage;
 
-Sun::Sun(sqlite3* db, Planet* earth)
-        : Planet(SUN, db, earth)
+Sun::Sun(IDataStorage& dataStorage, IPlanet& earth)
+        : Planet(SUN, dataStorage, earth)
 {
 
 }
@@ -93,7 +102,7 @@ CartesianCoords Sun::calculateGeocentricCartesianCoords(
 EclipticCoords Sun::calculateGeocentricEclipticCoords()
 {
     EclipticCoords newCoords;
-    EclipticCoords earthCoords = _earth->getHeliocentricEclipticCoords();
+    EclipticCoords earthCoords = _earth.getHeliocentricEclipticCoords();
 
     newCoords.lambda = earthCoords.lambda + Degree(180.0);
     newCoords.beta = earthCoords.beta * -1;
