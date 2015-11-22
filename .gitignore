@@ -5,4 +5,6 @@
 tsc/Release/
 tsc/Debug/
 tsc/UnitTest/
+skyPlotter/Debug/
+skyPlotter/Release/
 .metadata/
